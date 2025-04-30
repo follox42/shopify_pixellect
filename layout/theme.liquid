@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="{{ shop.locale }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title | escape }}</title>
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {{ content_for_header }}
+
+    {{ 'styles.css' | asset_url | stylesheet_tag }}
+  </head>
+  <body>
+    {% section 'header' %}
+      {{ content_for_layout }}
+    {% section 'footer' %}
+    {{ 'theme.js' | asset_url | script_tag }}
+  </body>
+</html>

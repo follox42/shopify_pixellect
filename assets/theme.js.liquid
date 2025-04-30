@@ -1,0 +1,56 @@
+// Animations des effets de lumière
+document.addEventListener('DOMContentLoaded', function () {
+    // Fonction pour créer l'effet de parallaxe au défilement pour les effets lumineux
+    function handleScrollEffects() {
+        const scrollY = window.scrollY;
+
+        // Sélectionner tous les effets de lumière
+        const lightEffects = document.querySelectorAll('.light-effect, .hero__building-glow, .hero__building-glow-2, .hero__building-glow-3, .product-glow-main, .product-glow-secondary, .product-glow-accent, .features-glow-primary, .features-glow-secondary, .features-glow-accent');
+
+        // Appliquer une légère translation basée sur le défilement
+        lightEffects.forEach((effect, index) => {
+            const speed = 0.05 + (index * 0.01); // Différentes vitesses pour chaque effet
+            const yPos = scrollY * speed;
+            effect.style.transform = `translateY(${yPos}px)`;
+        });
+    }
+
+    // Écouter l'événement de défilement
+    window.addEventListener('scroll', handleScrollEffects);
+
+    // Fonction pour faire briller les éléments au survol
+    function setupHoverEffects() {
+        // Sélectionner les éléments qui auront un effet de survol
+        const hoverElements = document.querySelectorAll('.hero__image img, .product-showcase__image img, .features__image img');
+
+        hoverElements.forEach(element => {
+            element.addEventListener('mouseenter', function () {
+                // Trouver les effets de lumière parents
+                const parent = this.closest('section');
+                const glowEffects = parent.querySelectorAll('[class*="glow"]');
+
+                // Intensifier les effets de lumière
+                glowEffects.forEach(glow => {
+                    glow.style.opacity = '0.8';
+                    glow.style.filter = 'blur(70px)';
+                    glow.style.transform = 'scale(1.2)';
+                });
+            });
+
+            element.addEventListener('mouseleave', function () {
+                // Restaurer les effets de lumière
+                const parent = this.closest('section');
+                const glowEffects = parent.querySelectorAll('[class*="glow"]');
+
+                glowEffects.forEach(glow => {
+                    glow.style.opacity = '';
+                    glow.style.filter = '';
+                    glow.style.transform = '';
+                });
+            });
+        });
+    }
+
+    // Initialiser les effets de survol
+    setupHoverEffects();
+});

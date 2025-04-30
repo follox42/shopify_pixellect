@@ -1,0 +1,27 @@
+/*
+This is the main page used to render everything and configurate the template.
+=============================================================================
+There is 3 sections:
+    - Hero
+    - Product shocase
+    - 
+*/
+{
+    "wrapper": "div.background",
+    "sections": {
+        "hero-section": {
+            "type": "hero-section"
+        },
+        "product-section": {
+            "type": "product-section"
+        },
+        "level-up": {
+            "type": "level-up"
+        }
+    },
+    "order": [
+        "hero-section",
+        "product-section",
+        "level-up"
+    ]
+}

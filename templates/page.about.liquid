@@ -1,0 +1,334 @@
+{% comment %}
+  page-about.liquid - Template pour la page À propos
+{% endcomment %}
+
+<div class="about-page">
+  <div class="about-page__container">
+    <div class="about-page__header">
+      <h1 class="about-page__title">{{ page.title }}</h1>
+    </div>
+    
+    <div class="about-page__content">
+      <div class="about-page__text">
+        {% if page.content != blank %}
+          {{ page.content }}
+        {% else %}
+          <p>Nous sommes passionnés par le pixel art et l'esthétique des jeux rétro. Basés en France, nous proposons des consoles rétro customisées, en mettant un accent sur la créativité et les détails uniques.</p>
+          
+          <p>Notre mission est de créer des objets qui évoquent la nostalgie des premiers jeux vidéo tout en apportant une touche artistique et contemporaine.</p>
+          
+          <p>Chacune de nos créations est conçue avec soin, dans le respect des designs originaux qui ont marqué l'histoire du jeu vidéo, mais avec notre vision unique.</p>
+        {% endif %}
+      </div>
+      
+      <div class="about-page__image">
+        <img src="{{ 'about-pixel-character.png' | asset_url }}" alt="Pixel Art Character" class="about-page__illustration">
+      </div>
+    </div>
+    
+    <div class="about-page__values">
+      <h2 class="about-page__subtitle">Nos valeurs</h2>
+      
+      <div class="about-page__values-grid">
+        <div class="about-page__value-item">
+          <div class="about-page__value-icon">🎮</div>
+          <h3 class="about-page__value-title">Passion</h3>
+          <p class="about-page__value-text">Nous sommes avant tout des passionnés de jeux vidéo et d'art pixelisé.</p>
+        </div>
+        
+        <div class="about-page__value-item">
+          <div class="about-page__value-icon">✨</div>
+          <h3 class="about-page__value-title">Qualité</h3>
+          <p class="about-page__value-text">Chaque détail compte dans nos créations, pour une expérience unique.</p>
+        </div>
+        
+        <div class="about-page__value-item">
+          <div class="about-page__value-icon">🔍</div>
+          <h3 class="about-page__value-title">Authenticité</h3>
+          <p class="about-page__value-text">Nous respectons l'héritage des jeux rétro tout en apportant notre touche.</p>
+        </div>
+        
+        <div class="about-page__value-item">
+          <div class="about-page__value-icon">🌱</div>
+          <h3 class="about-page__value-title">Durabilité</h3>
+          <p class="about-page__value-text">Nos produits sont conçus pour durer et créer des souvenirs pour longtemps.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="about-page__team">
+      <h2 class="about-page__subtitle">Notre équipe</h2>
+      
+      <div class="about-page__team-grid">
+        <div class="about-page__team-member">
+          <div class="about-page__team-avatar">
+            <img src="{{ 'team-pixel-1.png' | asset_url }}" alt="Team Member 1" class="about-page__team-image">
+          </div>
+          <h3 class="about-page__team-name">Thomas</h3>
+          <p class="about-page__team-role">Fondateur & Designer</p>
+        </div>
+        
+        <div class="about-page__team-member">
+          <div class="about-page__team-avatar">
+            <img src="{{ 'team-pixel-2.png' | asset_url }}" alt="Team Member 2" class="about-page__team-image">
+          </div>
+          <h3 class="about-page__team-name">Léa</h3>
+          <p class="about-page__team-role">Artiste Pixel</p>
+        </div>
+        
+        <div class="about-page__team-member">
+          <div class="about-page__team-avatar">
+            <img src="{{ 'team-pixel-3.png' | asset_url }}" alt="Team Member 3" class="about-page__team-image">
+          </div>
+          <h3 class="about-page__team-name">Antoine</h3>
+          <p class="about-page__team-role">Développeur</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.about-page {
+  background-color: #0c0d13;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 80px 0;
+  width: 100%;
+  position: relative;
+}
+
+.about-page::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(60, 60, 70, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.about-page__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.about-page__header {
+  margin-bottom: 60px;
+  text-align: left;
+}
+
+.about-page__title {
+  font-size: 64px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(to bottom, #ffffff 0%, #c0c0c0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.about-page__title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.1));
+  border-radius: 3px;
+}
+
+.about-page__content {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 80px;
+}
+
+.about-page__text {
+  flex: 1;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.about-page__text p {
+  margin-bottom: 20px;
+}
+
+.about-page__image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.about-page__illustration {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.about-page__subtitle {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 40px;
+  color: rgba(255, 255, 255, 0.9);
+  position: relative;
+  display: inline-block;
+}
+
+.about-page__subtitle::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.1));
+  border-radius: 2px;
+}
+
+.about-page__values {
+  margin-bottom: 80px;
+}
+
+.about-page__values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.about-page__value-item {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-page__value-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.about-page__value-icon {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.about-page__value-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.about-page__value-text {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.about-page__team {
+  margin-bottom: 40px;
+}
+
+.about-page__team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 30px;
+}
+
+.about-page__team-member {
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.about-page__team-member:hover {
+  transform: translateY(-5px);
+}
+
+.about-page__team-avatar {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-page__team-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-page__team-name {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.about-page__team-role {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+@media screen and (max-width: 991px) {
+  .about-page {
+    padding: 60px 0;
+  }
+  
+  .about-page__title {
+    font-size: 48px;
+  }
+  
+  .about-page__content {
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .about-page__text {
+    font-size: 16px;
+  }
+  
+  .about-page__image {
+    order: -1;
+  }
+  
+  .about-page__subtitle {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .about-page {
+    padding: 40px 0;
+  }
+  
+  .about-page__title {
+    font-size: 36px;
+  }
+  
+  .about-page__values-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-page__team-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+</style>

@@ -1,0 +1,115 @@
+{% comment %}
+  building-light-effect.liquid
+
+  Ce snippet crée un effet de fenêtres lumineuses pour les bâtiments pixelisés
+
+  Paramètres acceptés:
+  - element_id: ID de l'élément bâtiment (obligatoire)
+  - window_selector: Sélecteur CSS pour les fenêtres (défaut: '.pixel-window')
+  - light_color: Couleur de la lumière (défaut: '#ffb03a')
+  - intensity: Intensité de l'effet (défaut: 0.85)
+  - random: Variation aléatoire des lumières (défaut: true)
+
+  Exemple d'utilisation:
+  {% render 'building-light-effect',
+    element_id: 'pixel-building',
+    window_selector: '.window',
+    light_color: '#ffb03a',
+    intensity: 0.85,
+    random: true
+  %}
+{% endcomment %}
+
+{%- assign element_id = element_id | default: 'pixel-building' -%}
+{%- assign window_selector = window_selector | default: '.pixel-window' -%}
+{%- assign light_color = light_color | default: '#ffb03a' -%}
+{%- assign intensity = intensity | default: 0.85 -%}
+{%- assign random = random | default: true -%}
+
+<style>
+  #{{ element_id }} {
+    position: relative;
+  }
+
+  .building-window-light {
+    position: absolute;
+    background-color: {{ light_color }};
+    box-shadow: 0 0 8px 2px {{ light_color }};
+    z-index: -1;
+    transform: scale(0.9);
+    filter: blur(2px);
+  }
+
+  @keyframes windowFlicker {
+    0% { opacity: {{ intensity | times: 0.8 }}; }
+    3% { opacity: {{ intensity | times: 0.9 }}; }
+    6% { opacity: {{ intensity | times: 0.8 }}; }
+    9% { opacity: {{ intensity }}; }
+    12% { opacity: {{ intensity | times: 0.9 }}; }
+    50% { opacity: {{ intensity }}; }
+    92% { opacity: {{ intensity | times: 0.9 }}; }
+    96% { opacity: {{ intensity | times: 0.85 }}; }
+    100% { opacity: {{ intensity | times: 0.8 }}; }
+  }
+
+  @keyframes windowGlow {
+    0% { opacity: {{ intensity | times: 0.7 }}; }
+    50% { opacity: {{ intensity }}; }
+    100% { opacity: {{ intensity | times: 0.7 }}; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const buildingElement = document.getElementById('{{ element_id }}');
+    if (!buildingElement) return;
+
+    const windows = buildingElement.querySelectorAll('{{ window_selector }}');
+
+    windows.forEach(window => {
+      // Créer l'effet lumineux pour chaque fenêtre
+      const light = document.createElement('div');
+      light.className = 'building-window-light';
+
+      // Copier la taille et la position de la fenêtre
+      const rect = window.getBoundingClientRect();
+      const parentRect = buildingElement.getBoundingClientRect();
+
+      light.style.width = rect.width + 'px';
+      light.style.height = rect.height + 'px';
+      light.style.left = (rect.left - parentRect.left) + 'px';
+      light.style.top = (rect.top - parentRect.top) + 'px';
+
+      // Appliquer l'animation
+      {% if random %}
+        // 20% des fenêtres auront un effet de scintillement
+        if (Math.random() < 0.2) {
+          light.style.animation = "windowFlicker " + (8 + Math.random() * 6) + "s infinite";
+        } else {
+          light.style.animation = "windowGlow " + (4 + Math.random() * 5) + "s infinite";
+        }
+        // Décalage aléatoire pour l'animation
+        light.style.animationDelay = (Math.random() * 5) + "s";
+      {% else %}
+        light.style.animation = "windowGlow 5s infinite";
+        light.style.animationDelay = "0s";
+      {% endif %}
+
+      buildingElement.appendChild(light);
+    });
+
+    // Ajouter un effet d'ambiance générale
+    const ambientGlow = document.createElement('div');
+    ambientGlow.className = 'ambient-glow';
+    ambientGlow.style.position = 'absolute';
+    ambientGlow.style.width = '100%';
+    ambientGlow.style.height = '100%';
+    ambientGlow.style.top = '0';
+    ambientGlow.style.left = '0';
+    ambientGlow.style.zIndex = '-2';
+    ambientGlow.style.background = 'radial-gradient(circle at center, {{ light_color }} 0%, transparent 70%)';
+    ambientGlow.style.opacity = '0.2';
+    ambientGlow.style.filter = 'blur(15px)';
+    buildingElement.appendChild(ambientGlow);
+  });
+</script>

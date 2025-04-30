@@ -1,0 +1,136 @@
+{% comment %}
+  header.liquid - Section pour l'en-tête du site avec design amélioré
+{% endcomment %}
+
+{{ 'header.css' | asset_url | stylesheet_tag }}
+{{ 'header.js' | asset_url | script_tag }}
+
+<div class="header {% if section.settings.sticky_header %}header--sticky{% endif %}">
+  <div class="header_container">
+    <div class="header_logo">
+      <a href="/" class="header_logo-link">
+        {% if section.settings.logo != blank %}
+          <img src="{{ section.settings.logo | img_url: 'medium' }}" alt="{{ shop.name }}" class="header_logo-image">
+        {% else %}
+          <span class="header_logo-text">{{ section.settings.logo_text | default: shop.name }}</span>
+        {% endif %}
+      </a>
+    </div>
+    
+    <div class="header_navigation">
+      <nav class="header_nav">
+        <ul class="header_menu">
+          <li class="header_menu-item">
+            <a href="/collections/all" class="header_menu-link">
+              {{ 'header.products' | t }}
+            </a>
+          </li>
+          <li class="header_menu-item">
+            <a href="/pages/about" class="header_menu-link">
+              {{ 'header.about_me' | t }}
+            </a>
+          </li>
+          <li class="header_menu-item">
+            <a href="/pages/contact" class="header_menu-link">
+              {{ 'header.contact' | t }}
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    
+    <div class="header_actions">
+      <a href="/cart" class="header_action-link header_action-cart" aria-label="Cart">
+        <div class="header_cart-icon-container">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 6H22L19 16H6L3 6ZM3 6L2 3H0M8 20C8 20.5523 7.55228 21 7 21C6.44772 21 6 20.5523 6 20C6 19.4477 6.44772 19 7 19C7.55228 19 8 19.4477 8 20ZM19 20C19 20.5523 18.5523 21 18 21C17.4477 21 17 20.5523 17 20C17 19.4477 17.4477 19 18 19C18.5523 19 19 19.4477 19 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {% if cart.item_count > 0 %}
+            <span class="header_cart-count">{{ cart.item_count }}</span>
+          {% endif %}
+        </div>
+      </a>
+      
+      <button class="header_mobile-toggle" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="header_mobile-bar"></span>
+        <span class="header_mobile-bar"></span>
+        <span class="header_mobile-bar"></span>
+      </button>
+    </div>
+  </div>
+  
+  <div id="mobile-menu" class="header_mobile-menu">
+    <div class="header_mobile-menu-container">
+      <nav class="header_mobile-nav">
+        <ul class="header_mobile-menu-list">
+          {% for link in section.settings.menu.links %}
+            <li class="header_mobile-menu-item">
+              <a href="{{ link.url }}" class="header_mobile-menu-link{% if link.active %} header_mobile-menu-link--active{% endif %}">
+                {{ link.title }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo texte",
+      "default": "PIXELLECT"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Header fixe lors du défilement",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Fonctionnalités"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Afficher la recherche",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Afficher le compte",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "Afficher le panier",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header",
+      "category": "Header"
+    }
+  ]
+}
+{% endschema %}

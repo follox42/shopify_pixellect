@@ -1,0 +1,159 @@
+{% comment %}
+  pixel-glow-effect.liquid
+
+  Ce snippet génère des effets lumineux diffus pour les éléments pixelisés
+
+  Paramètres acceptés:
+  - element_id: ID de l'élément auquel appliquer l'effet (obligatoire)
+  - color: Couleur de l'effet (défaut: #ff9d00)
+  - intensity: Intensité de l'effet (défaut: 0.7)
+  - speed: Vitesse d'animation (défaut: 3)
+  - pixels: Nombre de pixels lumineux (défaut: 6)
+
+  Exemple d'utilisation:
+  {% render 'pixel-glow-effect',
+    element_id: 'retro-console',
+    color: '#ff9d00',
+    intensity: 0.7,
+    speed: 3,
+    pixels: 6
+  %}
+{% endcomment %}
+
+{%- assign element_id = element_id | default: 'glow-element' -%}
+{%- assign color = color | default: '#ff9d00' -%}
+{%- assign intensity = intensity | default: 0.7 -%}
+{%- assign speed = speed | default: 3 -%}
+{%- assign pixels = pixels | default: 6 -%}
+
+<style>
+  #{{ element_id }}-container {
+    position: relative;
+    overflow: visible;
+  }
+
+  .pixel-glow {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 0;
+    background-color: {{ color }};
+    filter: blur(3px);
+    opacity: 0;
+    z-index: -1;
+    box-shadow: 0 0 8px 2px {{ color }};
+  }
+
+  @keyframes pulse {
+    0% { opacity: 0; transform: scale(0.8); }
+    50% { opacity: {{ intensity }}; transform: scale(1.1); }
+    100% { opacity: 0; transform: scale(0.8); }
+  }
+</style>
+
+<div id="{{ element_id }}-glow-container" class="pixel-glow-container"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const targetElement = document.getElementById('{{ element_id }}');
+    const container = document.getElementById('{{ element_id }}-glow-container');
+
+    if (!targetElement || !container) return;
+
+    // Positionner le conteneur de glow par rapport à l'élément cible
+    const rect = targetElement.getBoundingClientRect();
+    container.style.position = 'absolute';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.pointerEvents = 'none';
+
+    // Insérer le conteneur avant l'élément cible
+    targetElement.parentNode.insertBefore(container, targetElement);
+
+    // Créer les pixels lumineux
+    for (let i = 0; i < {{ pixels }}; i++) {
+      const pixel = document.createElement('div');
+      pixel.className = 'pixel-glow';
+
+      // Positionner aléatoirement autour de l'élément
+      const posX = Math.random() * 100;
+      const posY = Math.random() * 100;
+      pixel.style.left = posX + '%';
+      pixel.style.top = posY + '%';
+
+      // Animation avec délai aléatoire
+      pixel.style.animation = "pulse {{ speed }}s infinite";
+      pixel.style.animationDelay = (Math.random() * 3) + 's';
+
+      container.appendChild(pixel);
+    }
+
+    // Ajouter des pixels lumineux supplémentaires sur les bords
+    const edges = [
+      {top: '0%', left: '20%'},
+      {top: '0%', left: '80%'},
+      {top: '100%', left: '20%'},
+      {top: '100%', left: '80%'},
+      {top: '50%', left: '0%'},
+      {top: '50%', left: '100%'}
+    ];
+
+    edges.forEach(pos => {
+      const pixel = document.createElement('div');
+      pixel.className = 'pixel-glow';
+      pixel.style.top = pos.top;
+      pixel.style.left = pos.left;
+      pixel.style.animation = "pulse {{ speed }}s infinite";
+      pixel.style.animationDelay = (Math.random() * 3) + 's';
+      container.appendChild(pixel);
+    });
+  });
+</script>
+
+{% comment %}
+  Variation pour fenêtres lumineuses de bâtiments
+{% endcomment %}
+{% if window_glow %}
+  <style>
+    .window-glow {
+      position: absolute;
+      background-color: {{ color }};
+      opacity: 0;
+      filter: blur(4px);
+      border-radius: 0;
+      z-index: -1;
+    }
+
+    @keyframes windowPulse {
+      0% { opacity: {{ intensity | times: 0.6 }}; }
+      50% { opacity: {{ intensity }}; }
+      100% { opacity: {{ intensity | times: 0.6 }}; }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const targetElement = document.getElementById('{{ element_id }}');
+      const windows = targetElement.querySelectorAll('.pixel-window');
+
+      windows.forEach((window) => {
+        const glow = document.createElement('div');
+        glow.className = 'window-glow';
+
+        const rect = window.getBoundingClientRect();
+        glow.style.width = rect.width + 4 + 'px';
+        glow.style.height = rect.height + 4 + 'px';
+        glow.style.top = window.offsetTop - 2 + 'px';
+        glow.style.left = window.offsetLeft - 2 + 'px';
+
+        // Animation avec délai aléatoire
+        glow.style.animation = 'windowPulse {{ speed }}s infinite';
+        glow.style.animationDelay = Math.random() * 2 + 's';
+
+        targetElement.appendChild(glow);
+      });
+    });
+  </script>
+{% endif %}

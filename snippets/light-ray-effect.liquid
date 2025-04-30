@@ -1,0 +1,246 @@
+{% comment %}
+  Light Ray Effect Snippet
+
+  Paramètres:
+  - target_selector: Sélecteur CSS où appliquer l'effet (défaut: "body")
+  - pixel_size: Taille des pixels (défaut: 6)
+  - angle: Angle d'ouverture du rayon (défaut: 45)
+  - direction: Direction du rayon en degrés (défaut: 270)
+  - color_center: Couleur centrale (défaut: "#ffffff")
+  - color_mid: Couleur intermédiaire (défaut: "#f5d76e")
+  - color_edge: Couleur des bords (défaut: "#996633")
+  - edge_alpha: Transparence des bords (défaut: 0.7)
+{% endcomment %}
+
+{%- assign target_selector = target_selector | default: 'body' -%}
+{%- assign pixel_size = pixel_size | default: 6 -%}
+{%- assign angle = angle | default: 45 -%}
+{%- assign direction = direction | default: 270 -%}
+{%- assign color_center = color_center | default: '#ffffff' -%}
+{%- assign color_mid = color_mid | default: '#f5d76e' -%}
+{%- assign color_edge = color_edge | default: '#996633' -%}
+{%- assign edge_alpha = edge_alpha | default: 0.7 -%}
+
+<style>
+  .shopify-light-ray-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .shopify-light-ray-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Fonction pour créer l'effet de rayon lumineux
+  (function() {
+    const targetElement = document.querySelector('{{ target_selector }}');
+    if (!targetElement) return;
+    
+    // S'assurer que l'élément cible a une position relative ou absolue
+    const computedStyle = window.getComputedStyle(targetElement);
+    if (computedStyle.position === 'static') {
+      targetElement.style.position = 'relative';
+    }
+    
+    // Créer le conteneur et le canvas
+    const container = document.createElement('div');
+    container.className = 'shopify-light-ray-container';
+    
+    const canvas = document.createElement('canvas');
+    canvas.className = 'shopify-light-ray-canvas';
+    canvas.id = 'shopify-light-ray-' + Math.random().toString(36).substring(7);
+    
+    container.appendChild(canvas);
+    targetElement.appendChild(container);
+    
+    // Classe LightRay
+    class LightRay {
+      constructor(canvasId, options = {}) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d', { alpha: true });
+        
+        this.options = {
+          pixelSize: options.pixelSize || {{ pixel_size }},
+          angle: options.angle || {{ angle }},
+          direction: options.direction || {{ direction }},
+          intensity: options.intensity || 1.0,
+          centerColor: options.centerColor || '{{ color_center }}',
+          midColor: options.midColor || '{{ color_mid }}',
+          edgeColor: options.edgeColor || '{{ color_edge }}',
+          edgeAlpha: options.edgeAlpha || {{ edge_alpha }},
+          edgeSharpness: options.edgeSharpness || 0.8,
+          noise: options.noise || 0.15,
+          density: options.density || 0.7,
+          brightness: options.brightness || 1.3,
+          spread: options.spread || 0.6,
+          minAlpha: options.minAlpha || 0.05,
+          lightPoints: options.lightPoints || []
+        };
+        
+        this.resizeCanvas();
+        this.generateNoise();
+        this.render();
+        
+        window.addEventListener('resize', () => {
+          this.resizeCanvas();
+          this.render();
+        });
+      }
+      
+      resizeCanvas() {
+        const parent = this.canvas.parentElement;
+        this.canvas.width = parent.clientWidth;
+        this.canvas.height = parent.clientHeight;
+        this.pixelsX = Math.ceil(this.canvas.width / this.options.pixelSize);
+        this.pixelsY = Math.ceil(this.canvas.height / this.options.pixelSize);
+      }
+      
+      generateNoise() {
+        this.noiseMap = [];
+        for (let y = 0; y < this.pixelsY; y++) {
+          this.noiseMap[y] = [];
+          for (let x = 0; x < this.pixelsX; x++) {
+            this.noiseMap[y][x] = Math.random();
+          }
+        }
+      }
+      
+      getNoise(x, y) {
+        return this.noiseMap[Math.floor(y) % this.noiseMap.length][Math.floor(x) % this.noiseMap[0].length];
+      }
+      
+      isInRay(x, y) {
+        const nx = x / this.pixelsX;
+        const ny = y / this.pixelsY;
+        
+        const cx = 0.5;
+        const cy = 0.5;
+        
+        const dirRad = (this.options.direction - 90) * Math.PI / 180;
+        
+        const dx = nx - cx;
+        const dy = ny - cy;
+        
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        const pointAngle = Math.atan2(dy, dx);
+        
+        let angleDiff = pointAngle - dirRad;
+        while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+        while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+        
+        const halfAngle = (this.options.angle / 2) * Math.PI / 180;
+        
+        const inAngle = Math.abs(angleDiff) <= halfAngle;
+        
+        let intensity = 0;
+        if (inAngle) {
+          const distanceFactor = Math.max(0, 1 - (distance / this.options.density));
+          
+          const angleFactor = Math.pow(1 - Math.abs(angleDiff) / halfAngle, this.options.edgeSharpness);
+          
+          intensity = distanceFactor * angleFactor * this.options.intensity;
+          
+          if (this.options.noise > 0) {
+            const noise = (this.getNoise(x * 3, y * 3) - 0.5) * this.options.noise;
+            intensity = Math.max(0, Math.min(1, intensity + noise));
+          }
+          
+          intensity = Math.pow(intensity, 1 / this.options.brightness);
+        }
+        
+        return intensity;
+      }
+      
+      hexToRgba(hex, alpha = 1) {
+        const r = parseInt(hex.substring(1, 3), 16);
+        const g = parseInt(hex.substring(3, 5), 16);
+        const b = parseInt(hex.substring(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      }
+      
+      getColorWithAlpha(intensity) {
+        const { centerColor, midColor, edgeColor, edgeAlpha, spread } = this.options;
+        
+        if (intensity <= 0) return 'rgba(0, 0, 0, 0)';
+        
+        const midThreshold = 0.5 * spread;
+        const edgeThreshold = 0.2 * spread;
+        
+        let alpha;
+        let color;
+        
+        if (intensity > midThreshold) {
+          const ratio = (intensity - midThreshold) / (1 - midThreshold);
+          color = midColor;
+          if (ratio > 0.7) {
+            color = centerColor;
+          }
+          alpha = 0.7 + (ratio * 0.3);
+        } else if (intensity > edgeThreshold) {
+          const ratio = (intensity - edgeThreshold) / (midThreshold - edgeThreshold);
+          color = edgeColor;
+          if (ratio > 0.5) {
+            color = midColor;
+          }
+          alpha = 0.3 + (ratio * 0.4);
+        } else {
+          const ratio = intensity / edgeThreshold;
+          color = edgeColor;
+          alpha = edgeAlpha * ratio;
+        }
+        
+        return this.hexToRgba(color, alpha);
+      }
+      
+      render() {
+        const { pixelSize, minAlpha } = this.options;
+        
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        for (let y = 0; y < this.pixelsY; y++) {
+          for (let x = 0; x < this.pixelsX; x++) {
+            let intensity = this.isInRay(x, y);
+            
+            for (const point of this.options.lightPoints) {
+              const dx = x - point.x * this.pixelsX;
+              const dy = y - point.y * this.pixelsY;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              const pointIntensity = Math.max(0, 1 - (distance / (point.radius * this.pixelsX / 100)));
+              intensity = Math.max(intensity, pointIntensity * point.intensity);
+            }
+            
+            if (intensity > minAlpha) {
+              this.ctx.fillStyle = this.getColorWithAlpha(intensity);
+              this.ctx.fillRect(
+                x * pixelSize,
+                y * pixelSize,
+                pixelSize,
+                pixelSize
+              );
+            }
+          }
+        }
+      }
+    }
+    
+    // Initialiser l'effet
+    new LightRay(canvas.id);
+  })();
+});
+</script>

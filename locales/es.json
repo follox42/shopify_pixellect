@@ -1,0 +1,10 @@
+{
+    "General": {
+        "add_to_cart": "Add to cart"
+    },
+    "header": {
+        "products": "Products",
+        "about_me": "About me",
+        "contact": "Contact"
+    }
+}
