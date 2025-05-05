@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
     "General": {},
     "header": {
@@ -31,7 +40,27 @@
             "button": "Voir nos créations"
         }
     },
-    "products": {},
+    "collection": {
+        "empty_description": "Découvrez notre collection de produits inspirés par les pixels",
+        "sort_by": "Trier par",
+        "sort": {
+            "manual": "En avant",
+            "price_asc": "Prix : du moins cher au plus cher",
+            "price_desc": "Prix : du plus cher au moins cher",
+            "title_asc": "A-Z",
+            "title_desc": "Z-A",
+            "oldest": "Du plus ancien au plus récent",
+            "newest": "Du plus récent au plus ancien"
+        },
+        "count_label": "produits",
+        "price_from": "À partir de",
+        "add_to_cart": "Ajouter au panier",
+        "sold_out": "Épuisé",
+        "no_products": "Aucun produit trouvé dans cette collection",
+        "prev": "Précédent",
+        "next": "Suivant",
+        "page": "Page {{ current }} sur {{ total }}"
+    },
     "contact": {
         "title": "Contactez-nous",
         "description": "Une question, un retour ou un projet à discuter ? Envoyez-nous un message !",
