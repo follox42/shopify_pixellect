@@ -284,6 +284,11 @@
   </div>
 </div>
 
+<!-- Add variant data for JavaScript -->
+<script id="ProductJson" type="application/json">
+  {{ product | json }}
+</script>
+
 <style>
   /* Additional styles specific to dropshipping */
   .product__promo {
@@ -544,6 +549,155 @@
           timer.innerHTML = "<p>Offer ended!</p>";
         }
       }, 1000);
+    }
+    
+    // =====================================
+    // VARIANT SELECTION & PRICE UPDATE CODE
+    // =====================================
+    
+    // Get product data from JSON
+    const productJson = document.getElementById('ProductJson');
+    if (productJson) {
+      const product = JSON.parse(productJson.textContent);
+      const variants = product.variants;
+      
+      // Get the price display elements
+      const priceElement = document.getElementById('ProductPrice');
+      const compareElement = document.getElementById('ComparePrice');
+      const priceContainer = document.querySelector('.product__price-container');
+      
+      // Get variant selectors
+      const variantSelectors = document.querySelectorAll('.product__select');
+      
+      // Function to format money consistently with Shopify
+      function formatMoney(cents) {
+        return (cents / 100).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+      }
+      
+      // Function to update the price based on selected variant
+      function updatePrice(variant) {
+        if (!variant) {
+          return;
+        }
+        
+        // Update the displayed price
+        if (priceElement) {
+          priceElement.innerHTML = formatMoney(variant.price) + ' ' + window.Shopify.currency.active;
+        }
+        
+        // Update any comparison price and savings badge
+        if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+          if (compareElement) {
+            compareElement.innerHTML = formatMoney(variant.compare_at_price) + ' ' + window.Shopify.currency.active;
+            compareElement.style.display = 'inline-block';
+          }
+          
+          // Calculate and update discount percentage
+          const discountPercentage = Math.round((variant.compare_at_price - variant.price) * 100 / variant.compare_at_price);
+          const savingElement = priceContainer.querySelector('.product__price-saving');
+          
+          if (savingElement) {
+            savingElement.innerHTML = '-' + discountPercentage + '%';
+            savingElement.style.display = 'inline-block';
+          } else {
+            // Create a saving element if it doesn't exist
+            const newSavingElement = document.createElement('span');
+            newSavingElement.className = 'product__price-saving';
+            newSavingElement.innerHTML = '-' + discountPercentage + '%';
+            priceContainer.appendChild(newSavingElement);
+          }
+          
+          // Add sale class to price
+          if (priceElement) {
+            priceElement.classList.add('product__price--sale');
+          }
+        } else {
+          // No compare price, hide elements
+          if (compareElement) {
+            compareElement.style.display = 'none';
+          }
+          
+          const savingElement = priceContainer.querySelector('.product__price-saving');
+          if (savingElement) {
+            savingElement.style.display = 'none';
+          }
+          
+          // Remove sale class from price
+          if (priceElement) {
+            priceElement.classList.remove('product__price--sale');
+          }
+        }
+        
+        // Update add to cart button state
+        const addToCartButton = document.getElementById('AddToCart');
+        const addToCartText = document.getElementById('AddToCartText');
+        
+        if (variant.available) {
+          addToCartButton.classList.remove('disabled');
+          addToCartButton.disabled = false;
+          addToCartText.innerHTML = window.theme && window.theme.strings && window.theme.strings.addToCart || 'Add to cart';
+        } else {
+          addToCartButton.classList.add('disabled');
+          addToCartButton.disabled = true;
+          addToCartText.innerHTML = window.theme && window.theme.strings && window.theme.strings.soldOut || 'Sold out';
+        }
+      }
+      
+      // Function to find the selected variant
+      function getSelectedVariant() {
+        // Get the currently selected options
+        const selectedOptions = [];
+        
+        variantSelectors.forEach(selector => {
+          selectedOptions.push(selector.value);
+        });
+        
+        // Find the matching variant
+        let foundVariant = null;
+        
+        variants.forEach(variant => {
+          let optionsMatch = true;
+          
+          for (let i = 0; i < selectedOptions.length; i++) {
+            if (variant.options[i] !== selectedOptions[i]) {
+              optionsMatch = false;
+              break;
+            }
+          }
+          
+          if (optionsMatch) {
+            foundVariant = variant;
+          }
+        });
+        
+        return foundVariant;
+      }
+      
+      // Set up event listeners for variant selectors
+      if (variantSelectors.length > 0) {
+        variantSelectors.forEach(selector => {
+          selector.addEventListener('change', function() {
+            const selectedVariant = getSelectedVariant();
+            updatePrice(selectedVariant);
+            
+            // If the variant has a featured image, update the main image
+            if (selectedVariant && selectedVariant.featured_image) {
+              const imageId = selectedVariant.featured_image.id;
+              const thumbnail = document.querySelector(`.product__thumbnail[data-media-id="${imageId}"]`);
+              
+              if (thumbnail) {
+                thumbnail.click();
+              }
+            }
+          });
+        });
+        
+        // Initialize with the default variant
+        const initialVariant = getSelectedVariant();
+        if (initialVariant) {
+          updatePrice(initialVariant);
+        }
+      }
     }
   });
 </script>
