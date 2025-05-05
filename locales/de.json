@@ -1,0 +1,142 @@
+{
+    "General": {
+        "add_to_cart": "In den Warenkorb"
+    },
+    "header": {
+        "products": "Produkte",
+        "contact": "Kontakt"
+    },
+    "footer": {
+        "footer_description": "Einzigartige Pixel-Art-Kreationen, um Ihren Raum zu verschönern. Nostalgische und elegante Produkte mit Leidenschaft gefertigt.",
+        "quick-links": "Schnellzugriffe",
+        "privacy-policy": "Datenschutzerklärung",
+        "refund-policy": "Rückgaberecht",
+        "terms-of-service": "Nutzungsbedingungen",
+        "contact": "Kontaktieren Sie uns",
+        "rights-text": "Alle Rechte vorbehalten.",
+        "payment-text": "100% sichere Zahlung"
+    },
+    "main": {
+        "hero-section": {
+            "title": "Tauchen Sie ein in die Pixel-Welt",
+            "description": "Entdecken Sie unsere exklusive Kollektion pixelkunstartiger Dekorationen, Retro-Konsolenzubehör und vieles mehr...",
+            "button": "Abenteuer starten"
+        },
+        "product-section": {
+            "title": "Alle unsere Produkte",
+            "description": "Entdecken Sie unsere Auswahl einzigartiger Stücke, hinterleuchteter Lampen und Gaming-Zubehör, um Ihren Raum zu personalisieren.",
+            "button": "Kollektion ansehen"
+        },
+        "level-up": {
+            "title": "Bringen Sie Ihr Dekor zum Leben",
+            "description": "Verleihen Sie Ihrem Raum Nostalgie und Modernität mit unseren exklusiven Pixel-Art-Kreationen und dynamischen RGB-Lampen.",
+            "button": "Unsere Kreationen ansehen"
+        }
+    },
+    "collection": {
+        "empty_description": "Entdecken Sie unsere Kollektion pixelinspirierter Produkte",
+        "sort_by": "Sortieren nach",
+        "sort": {
+            "manual": "Empfohlen",
+            "price_asc": "Preis: aufsteigend",
+            "price_desc": "Preis: absteigend",
+            "title_asc": "A–Z",
+            "title_desc": "Z–A",
+            "oldest": "Älteste zuerst",
+            "newest": "Neueste zuerst"
+        },
+        "count_label": "Produkte",
+        "price_from": "Ab",
+        "add_to_cart": "In den Warenkorb",
+        "sold_out": "Ausverkauft",
+        "no_products": "Keine Produkte in dieser Kollektion gefunden",
+        "prev": "Vorherige",
+        "next": "Nächste",
+        "page": "Seite {{ current }} von {{ total }}"
+    },
+    "product-template": {
+        "quantity_label": "Menge",
+        "decrease": "-",
+        "increase": "+",
+        "promo_badge": "LIMITIERTES ANGEBOT",
+        "timer_days": "Tage",
+        "timer_hours": "Stunden",
+        "timer_minutes": "Minuten",
+        "timer_seconds": "Sekunden",
+        "add_to_cart": "In den Warenkorb",
+        "sold_out": "Ausverkauft",
+        "benefit_shipping": "Weltweiter Versand",
+        "benefit_text_shipping": "Verfolgte Lieferung in 10–15 Tagen",
+        "benefit_guarantee": "Geld-zurück-Garantie",
+        "benefit_text_guarantee": "Rückerstattung innerhalb von 30 Tagen",
+        "benefit_payment": "Sichere Zahlung",
+        "benefit_text_payment": "100% sichere Transaktionen",
+        "trust_title": "Zahlungsmethoden",
+        "tab_description": "Beschreibung",
+        "tab_features": "Eigenschaften",
+        "tab_shipping": "Versand & Rückgabe"
+    },
+    "contact": {
+        "title": "Kontaktieren Sie uns",
+        "description": "Haben Sie eine Frage, Feedback oder ein Projekt zu besprechen? Senden Sie uns eine Nachricht!",
+        "lenom": "Ihr Name",
+        "lemail": "Ihre E-Mail",
+        "lemessage": "Ihre Nachricht",
+        "button": "Absenden",
+        "image_alt": "Pixel-Art-Illustration des Kontaktformulars"
+    },
+    "cart": {
+        "title": "Ihr Warenkorb",
+        "head": {
+            "product": "Produkt",
+            "price": "Preis",
+            "quantity": "Menge",
+            "total": "Gesamt"
+        },
+        "remove": "Entfernen",
+        "decrease": "-",
+        "increase": "+",
+        "quantity_for": "Menge für",
+        "summary": {
+            "subtotal": "Zwischensumme",
+            "shipping": "Versand",
+            "taxes": "Steuern",
+            "total": "Gesamt",
+            "calculated_at_checkout": "Berechnet beim Checkout"
+        },
+        "update": "Warenkorb aktualisieren",
+        "checkout": "Zur Kasse",
+        "legal": {
+            "agree": "Mit Ihrer Bestellung stimmen Sie unseren",
+            "refund": "Rückgabebedingungen",
+            "terms": "Nutzungsbedingungen",
+            "and": "und unserer",
+            "privacy": "Datenschutzerklärung",
+            "secure_payment": "100% sichere Zahlung über Shopify Payments. Rückerstattung innerhalb von 14 Tagen."
+        },
+        "continue_shopping": "Weiter einkaufen",
+        "empty": {
+            "title": "Ihr Warenkorb ist leer",
+            "text": "Sie haben noch keine Produkte in Ihren Warenkorb gelegt.",
+            "button": "Einkauf starten"
+        }
+    },
+    "password": {
+        "coming_soon": "Demnächst verfügbar",
+        "store_message": "Unser Shop wird gerade vorbereitet. Wir sind bald online mit unseren exklusiven Pixel-Art-Kreationen!",
+        "form": {
+            "password": "Passwort",
+            "submit": "Eingeben",
+            "error": "Falsches Passwort. Bitte versuchen Sie es erneut."
+        },
+        "contact_info": "Haben Sie Fragen? Kontaktieren Sie uns unter",
+        "share": "Folgen Sie uns in den sozialen Medien",
+        "store_owner": "Inhaberanmeldung",
+        "login_form": {
+            "title": "Administrationsanmeldung",
+            "password": "Passwort",
+            "submit": "Anmelden",
+            "cancel": "Abbrechen"
+        }
+    }
+}

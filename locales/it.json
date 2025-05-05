@@ -1,0 +1,144 @@
+{
+    "it": {
+        "General": {
+            "add_to_cart": "Aggiungi al carrello"
+        },
+        "header": {
+            "products": "Prodotti",
+            "contact": "Contatti"
+        },
+        "footer": {
+            "footer_description": "Creazioni uniche in pixel art per valorizzare il tuo spazio. Prodotti nostalgici ed eleganti realizzati con passione.",
+            "quick-links": "Link rapidi",
+            "privacy-policy": "Informativa sulla privacy",
+            "refund-policy": "Politica di reso",
+            "terms-of-service": "Termini di servizio",
+            "contact": "Contattaci",
+            "rights-text": "Tutti i diritti riservati.",
+            "payment-text": "Pagamento 100% sicuro"
+        },
+        "main": {
+            "hero-section": {
+                "title": "Immergiti nell’universo Pixel",
+                "description": "Scopri la nostra collezione esclusiva di decorazioni ispirate alla pixel art, accessori per console retrò e molto altro...",
+                "button": "Inizia l’avventura"
+            },
+            "product-section": {
+                "title": "Tutti i nostri prodotti",
+                "description": "Esplora la nostra selezione di pezzi unici, lampade retroilluminate e accessori da gaming per personalizzare il tuo spazio.",
+                "button": "Visualizza la collezione"
+            },
+            "level-up": {
+                "title": "Dai vita al tuo arredamento",
+                "description": "Aggiungi un tocco di nostalgia e modernità con le nostre creazioni esclusive in pixel art e le lampade RGB dinamiche.",
+                "button": "Scopri le nostre creazioni"
+            }
+        },
+        "collection": {
+            "empty_description": "Esplora la nostra collezione di prodotti ispirati al pixel",
+            "sort_by": "Ordina per",
+            "sort": {
+                "manual": "In evidenza",
+                "price_asc": "Prezzo: basso → alto",
+                "price_desc": "Prezzo: alto → basso",
+                "title_asc": "A–Z",
+                "title_desc": "Z–A",
+                "oldest": "Dal più vecchio",
+                "newest": "Dal più recente"
+            },
+            "count_label": "prodotti",
+            "price_from": "Da",
+            "add_to_cart": "Aggiungi al carrello",
+            "sold_out": "Esaurito",
+            "no_products": "Nessun prodotto trovato in questa collezione",
+            "prev": "Precedente",
+            "next": "Successiva",
+            "page": "Pagina {{ current }} di {{ total }}"
+        },
+        "product-template": {
+            "quantity_label": "Quantità",
+            "decrease": "-",
+            "increase": "+",
+            "promo_badge": "OFFERTA LIMITATA",
+            "timer_days": "Giorni",
+            "timer_hours": "Ore",
+            "timer_minutes": "Minuti",
+            "timer_seconds": "Secondi",
+            "add_to_cart": "Aggiungi al carrello",
+            "sold_out": "Esaurito",
+            "benefit_shipping": "Spedizione mondiale",
+            "benefit_text_shipping": "Consegna tracciata in 10–15 giorni",
+            "benefit_guarantee": "Garanzia Soddisfatti o Rimborsati",
+            "benefit_text_guarantee": "Rimborso entro 30 giorni",
+            "benefit_payment": "Pagamento sicuro",
+            "benefit_text_payment": "Transazioni 100% sicure",
+            "trust_title": "Metodi di pagamento",
+            "tab_description": "Descrizione",
+            "tab_features": "Caratteristiche",
+            "tab_shipping": "Spedizione & Resi"
+        },
+        "contact": {
+            "title": "Contattaci",
+            "description": "Hai domande, suggerimenti o un progetto da discutere? Inviaci un messaggio!",
+            "lenom": "Il tuo nome",
+            "lemail": "La tua email",
+            "lemessage": "Il tuo messaggio",
+            "button": "Invia",
+            "image_alt": "Illustrazione pixel art del modulo di contatto"
+        },
+        "cart": {
+            "title": "Il tuo carrello",
+            "head": {
+                "product": "Prodotto",
+                "price": "Prezzo",
+                "quantity": "Quantità",
+                "total": "Totale"
+            },
+            "remove": "Rimuovi",
+            "decrease": "-",
+            "increase": "+",
+            "quantity_for": "Quantità per",
+            "summary": {
+                "subtotal": "Totale parziale",
+                "shipping": "Spedizione",
+                "taxes": "Tasse",
+                "total": "Totale",
+                "calculated_at_checkout": "Calcolato al checkout"
+            },
+            "update": "Aggiorna carrello",
+            "checkout": "Passa al pagamento",
+            "legal": {
+                "agree": "Effettuando l’ordine, accetti la nostra",
+                "refund": "politica di rimborso",
+                "terms": "condizioni di servizio",
+                "and": "e la nostra",
+                "privacy": "politica sulla privacy",
+                "secure_payment": "Pagamento 100% sicuro tramite Shopify Payments. Rimborsi entro 14 giorni."
+            },
+            "continue_shopping": "Continua lo shopping",
+            "empty": {
+                "title": "Il tuo carrello è vuoto",
+                "text": "Non hai ancora aggiunto prodotti al carrello.",
+                "button": "Inizia lo shopping"
+            }
+        }
+    },
+    "password": {
+        "coming_soon": "Prossimamente",
+        "store_message": "Il nostro negozio è in fase di preparazione. Saremo presto online con le nostre creazioni esclusive di pixel art!",
+        "form": {
+            "password": "Password",
+            "submit": "Entra",
+            "error": "Password errata. Per favore riprova."
+        },
+        "contact_info": "Hai domande? Contattaci a",
+        "share": "Seguici sui social media",
+        "store_owner": "Accesso proprietario",
+        "login_form": {
+            "title": "Accesso amministrazione",
+            "password": "Password",
+            "submit": "Accedi",
+            "cancel": "Annulla"
+        }
+    }
+}

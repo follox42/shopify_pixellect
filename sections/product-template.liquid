@@ -1,0 +1,688 @@
+{% comment %}
+  product.liquid - Template optimized for dropshipping with PIXELLECT style - Internationalized
+{% endcomment %}
+{{ 'product.css' | asset_url | stylesheet_tag }}
+
+<div class="product">
+  <div class="product__container">
+    <!-- Product Gallery -->
+    <div class="product__gallery product-animate">
+      <div class="product__main-image-container">
+        {% if product.featured_media %}
+          <img 
+            src="{{ product.featured_media | img_url: 'large' }}" 
+            alt="{{ product.featured_media.alt | escape }}"
+            id="ProductMainImage"
+            class="product__main-image"
+            data-zoom-image="{{ product.featured_media | img_url: '1200x' }}"
+          >
+          
+          {% if product.media.size > 1 %}
+            <div class="product__image-zoom">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 3H21V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 21H3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 3L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 21L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          {% endif %}
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag: 'product__main-image placeholder-svg' }}
+        {% endif %}
+      </div>
+
+      {% if product.media.size > 1 %}
+        <div class="product__thumbnails">
+          {% for media in product.media %}
+            <div class="product__thumbnail {% if forloop.first %}is-active{% endif %}" data-media-id="{{ media.id }}">
+              <img 
+                src="{{ media | img_url: '150x' }}" 
+                alt="{{ media.alt | escape }}"
+                class="product__thumbnail-image"
+                data-full-image="{{ media | img_url: 'large' }}"
+                data-zoom-image="{{ media | img_url: '1200x' }}"
+              >
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Product Information -->
+    <div class="product__details product-animate" data-delay="100">
+      <h1 class="product__title">{{ product.title }}</h1>
+      
+      <div class="product__price-container">
+        <span class="product__price {% if product.compare_at_price > product.price %}product__price--sale{% endif %}" id="ProductPrice">
+          {{ product.price | money }}
+        </span>
+        
+        {% if product.compare_at_price > product.price %}
+          <span class="product__price--compare" id="ComparePrice">
+            {{ product.compare_at_price | money }}
+          </span>
+          
+          {% assign discount_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+          <span class="product__price-saving">-{{ discount_percentage }}%</span>
+        {% endif %}
+      </div>
+
+      <!-- Purchase Form -->
+      {% form 'product', product, id: 'AddToCartForm', class: 'product__form' %}
+        {% if product.variants.size > 1 %}
+          <div class="product__variants">
+            {% for option in product.options_with_values %}
+              <div class="product__option">
+                <label for="Option{{ option.position }}" class="product__option-label">
+                  {{ option.name }}
+                </label>
+                
+                <select 
+                  id="Option{{ option.position }}" 
+                  name="options[{{ option.name | escape }}]" 
+                  class="product__select" 
+                  data-option-position="{{ option.position }}"
+                >
+                  {% for value in option.values %}
+                    <option 
+                      value="{{ value | escape }}" 
+                      {% if option.selected_value == value %}selected="selected"{% endif %}
+                    >
+                      {{ value }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        
+        <div class="product__quantity">
+          <label for="Quantity" class="product__quantity-label">
+            {{ 'product-template.quantity_label' | t }}
+          </label>
+          <div class="product__quantity-wrapper">
+            <button type="button" class="product__quantity-button product__quantity-decrease" data-action="decrease">
+              {{ 'product-template.decrease' | t }}
+            </button>
+            <input 
+              type="number" 
+              id="Quantity" 
+              name="quantity" 
+              value="1" 
+              min="1" 
+              class="product__quantity-input"
+            >
+            <button type="button" class="product__quantity-button product__quantity-increase" data-action="increase">
+              {{ 'product-template.increase' | t }}
+            </button>
+          </div>
+        </div>
+        
+        <!-- Promo and timer -->
+        {% if section.settings.show_promo_timer %}
+          <div class="product__promo">
+            <div class="product__promo-badge">{{ 'product-template.promo_badge' | t }}</div>
+            <div class="product__timer" data-end-time="{{ section.settings.promo_end_time }}">
+              <div class="product__timer-item">
+                <span class="product__timer-value" data-days>00</span>
+                <span class="product__timer-label">{{ 'product-template.timer_days' | t }}</span>
+              </div>
+              <div class="product__timer-item">
+                <span class="product__timer-value" data-hours>00</span>
+                <span class="product__timer-label">{{ 'product-template.timer_hours' | t }}</span>
+              </div>
+              <div class="product__timer-item">
+                <span class="product__timer-value" data-minutes>00</span>
+                <span class="product__timer-label">{{ 'product-template.timer_minutes' | t }}</span>
+              </div>
+              <div class="product__timer-item">
+                <span class="product__timer-value" data-seconds>00</span>
+                <span class="product__timer-label">{{ 'product-template.timer_seconds' | t }}</span>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        
+        <div class="product__actions">
+          <button 
+            type="submit" 
+            name="add" 
+            id="AddToCart" 
+            class="product__add-to-cart-button {% if product.available == false %}disabled{% endif %}"
+            {% if product.available == false %}disabled{% endif %}
+          >
+            <span id="AddToCartText">
+              {% if product.available %}
+                {{ 'product-template.add_to_cart' | t }}
+              {% else %}
+                {{ 'product-template.sold_out' | t }}
+              {% endif %}
+            </span>
+          </button>
+          
+          {% if section.settings.show_buy_now %}
+            {{ form | payment_button }}
+          {% endif %}
+        </div>
+      {% endform %}
+      
+      <!-- Shipping Benefits -->
+      <div class="product__benefits">
+        <div class="product__benefit-item">
+          <div class="product__benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12.5C5 11.4456 5.44772 10.5 6 10.5H18C18.5523 10.5 19 11.4456 19 12.5C19 13.5544 18.5523 14.5 18 14.5H6C5.44772 14.5 5 13.5544 5 12.5Z" stroke="#f0c362" stroke-width="1.5"/>
+              <rect x="7" y="4" width="10" height="16" rx="2" stroke="#f0c362" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="product__benefit-content">
+            <h4 class="product__benefit-title">{{ 'product-template.benefit_shipping' | t }}</h4>
+            <p class="product__benefit-text">{{ 'product-template.benefit_text_shipping' | t }}</p>
+          </div>
+        </div>
+        <div class="product__benefit-item">
+          <div class="product__benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#f0c362" stroke-width="1.5"/>
+              <path d="M12 7L12 12M12 12L15 15M12 12L9 15" stroke="#f0c362" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="product__benefit-content">
+            <h4 class="product__benefit-title">{{ 'product-template.benefit_guarantee' | t }}</h4>
+            <p class="product__benefit-text">{{ 'product-template.benefit_text_guarantee' | t }}</p>
+          </div>
+        </div>
+        <div class="product__benefit-item">
+          <div class="product__benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#f0c362" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="product__benefit-content">
+            <h4 class="product__benefit-title">{{ 'product-template.benefit_payment' | t }}</h4>
+            <p class="product__benefit-text">{{ 'product-template.benefit_text_payment' | t }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Trust and reviews -->
+      {% if section.settings.show_trust_badges %}
+        <div class="product__trust">
+          <h4 class="product__trust-title">{{ 'product-template.trust_title' | t }}</h4>
+          <div class="product__trust-badges">
+            {% for type in shop.enabled_payment_types %}
+              <li class="footer__payment-item">
+                {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
+              </li>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  
+  <!-- Customizable description sections -->
+  <div class="product__description-container">
+    <div class="product__accordions product-animate" data-delay="200">
+      <!-- Main description -->
+      <div class="product__accordion is-active">
+        <button class="product__accordion-header">
+          <span>{{ 'product-template.tab_description' | t }}</span>
+          <span class="product__accordion-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+        <div class="product__accordion-content">
+          <div class="product__description rte">
+            {{ product.description }}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Features -->
+      {% if section.settings.show_features_tab and section.settings.features_content != blank %}
+        <div class="product__accordion">
+          <button class="product__accordion-header">
+            <span>{{ 'product-template.tab_features' | t }}</span>
+            <span class="product__accordion-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <div class="product__accordion-content">
+            <div class="product__features rte">
+              {{ section.settings.features_content }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      
+      <!-- Shipping -->
+      {% if section.settings.show_shipping_tab and section.settings.shipping_content != blank %}
+        <div class="product__accordion">
+          <button class="product__accordion-header">
+            <span>{{ 'product-template.tab_shipping' | t }}</span>
+            <span class="product__accordion-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <div class="product__accordion-content">
+            <div class="product__shipping-details rte">
+              {{ section.settings.shipping_content }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Additional styles specific to dropshipping */
+  .product__promo {
+    margin-bottom: 20px;
+    background-color: rgba(240, 195, 98, 0.1);
+    padding: 16px;
+    border: 1px solid rgba(240, 195, 98, 0.2);
+  }
+  
+  .product__promo-badge {
+    display: inline-block;
+    background-color: #f0c362;
+    color: #0c0d13;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 4px 12px;
+    margin-bottom: 12px;
+  }
+  
+  .product__timer {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
+  .product__timer-item {
+    flex: 1;
+    background-color: rgba(15, 15, 20, 0.8);
+    padding: 8px 4px;
+    text-align: center;
+    border: 1px solid rgba(240, 195, 98, 0.3);
+  }
+  
+  .product__timer-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: #f0c362;
+    margin-bottom: 4px;
+  }
+  
+  .product__timer-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .product__benefits {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    border-top: 1px solid rgba(60, 60, 65, 0.8);
+    padding-top: 24px;
+  }
+  
+  .product__benefit-item {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .product__benefit-icon {
+    flex-shrink: 0;
+    width: 24px;
+    color: #f0c362;
+  }
+  
+  .product__benefit-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f0c362;
+    margin: 0 0 4px 0;
+  }
+  
+  .product__benefit-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+  }
+  
+  .product__trust {
+    margin-top: 24px;
+    border-top: 1px solid rgba(60, 60, 65, 0.8);
+    padding-top: 20px;
+  }
+  
+  .product__trust-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 12px 0;
+    text-align: center;
+  }
+  
+  .product__trust-badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .product__trust-badge {
+    opacity: 0.8;
+    filter: grayscale(0.2);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  
+  .product__trust-badge:hover {
+    opacity: 1;
+    filter: grayscale(0);
+  }
+  
+  .product__price-saving {
+    background-color: #f0c362;
+    color: #0c0d13;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  
+  /* Animations */
+  .product-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .product-animate.animated {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-animate {
+      transition: none;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Animation of elements on scroll
+    const animateElements = document.querySelectorAll('.product-animate');
+    
+    if (animateElements.length > 0) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const element = entry.target;
+            const delay = element.getAttribute('data-delay') || 0;
+            
+            setTimeout(() => {
+              element.classList.add('animated');
+            }, delay);
+            
+            // Once animated, stop observing
+            observer.unobserve(element);
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+      });
+      
+      // Observe each element to animate
+      animateElements.forEach(element => {
+        observer.observe(element);
+      });
+    }
+    
+    // Product thumbnail management
+    const thumbnails = document.querySelectorAll('.product__thumbnail');
+    if (thumbnails.length > 0) {
+      thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', function() {
+          // Update main image
+          const mainImage = document.getElementById('ProductMainImage');
+          const fullImageUrl = this.querySelector('.product__thumbnail-image').getAttribute('data-full-image');
+          const zoomImageUrl = this.querySelector('.product__thumbnail-image').getAttribute('data-zoom-image');
+          
+          mainImage.src = fullImageUrl;
+          mainImage.setAttribute('data-zoom-image', zoomImageUrl);
+          
+          // Update active class
+          thumbnails.forEach(thumb => thumb.classList.remove('is-active'));
+          this.classList.add('is-active');
+        });
+      });
+    }
+    
+    // Quantity buttons management
+    const quantityButtons = document.querySelectorAll('.product__quantity-button');
+    if (quantityButtons.length > 0) {
+      quantityButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const input = document.getElementById('Quantity');
+          const currentValue = parseInt(input.value);
+          const action = this.getAttribute('data-action');
+          
+          if (action === 'decrease' && currentValue > 1) {
+            input.value = currentValue - 1;
+          } else if (action === 'increase') {
+            input.value = currentValue + 1;
+          }
+        });
+      });
+    }
+    
+    // Accordion management
+    const accordionHeaders = document.querySelectorAll('.product__accordion-header');
+    if (accordionHeaders.length > 0) {
+      accordionHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+          const accordion = this.parentElement;
+          const isActive = accordion.classList.contains('is-active');
+          
+          // Close all accordions
+          const accordions = document.querySelectorAll('.product__accordion');
+          accordions.forEach(acc => acc.classList.remove('is-active'));
+          
+          // Open clicked accordion if it wasn't already open
+          if (!isActive) {
+            accordion.classList.add('is-active');
+          }
+        });
+      });
+    }
+    
+    // Countdown timer (for limited offer)
+    const timer = document.querySelector('.product__timer');
+    if (timer) {
+      const endTimeStr = timer.getAttribute('data-end-time');
+      const endTime = new Date(endTimeStr).getTime();
+      
+      // Update timer every second
+      const interval = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = endTime - now;
+        
+        // Time remaining
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Display values
+        timer.querySelector('[data-days]').textContent = days.toString().padStart(2, '0');
+        timer.querySelector('[data-hours]').textContent = hours.toString().padStart(2, '0');
+        timer.querySelector('[data-minutes]').textContent = minutes.toString().padStart(2, '0');
+        timer.querySelector('[data-seconds]').textContent = seconds.toString().padStart(2, '0');
+        
+        // If the countdown is finished
+        if (distance < 0) {
+          clearInterval(interval);
+          timer.innerHTML = "<p>Offer ended!</p>";
+        }
+      }, 1000);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Dropshipping Product",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Quantity label",
+      "default": "Quantity"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Add to cart text",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_text",
+      "label": "Sold out text",
+      "default": "Sold out"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_now",
+      "label": "Show 'Buy it now' button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Promotions"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_promo_timer",
+      "label": "Show limited time offer timer",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "promo_badge_text",
+      "label": "Promo badge text",
+      "default": "LIMITED OFFER"
+    },
+    {
+      "type": "text",
+      "id": "promo_end_time",
+      "label": "Promo end date (YYYY-MM-DD)",
+      "default": "2025-12-31",
+      "info": "Format: YYYY-MM-DD"
+    },
+    {
+      "type": "header",
+      "content": "Product benefits"
+    },
+    {
+      "type": "text",
+      "id": "shipping_text",
+      "label": "Shipping text",
+      "default": "Tracked delivery in 10-15 days"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Guarantee text",
+      "default": "Refund within 30 days"
+    },
+    {
+      "type": "text",
+      "id": "payment_text",
+      "label": "Payment text",
+      "default": "100% secure transactions"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "Show trust badges",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product description"
+    },
+    {
+      "type": "text",
+      "id": "description_title",
+      "label": "Description title",
+      "default": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_features_tab",
+      "label": "Show features tab",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "features_title",
+      "label": "Features title",
+      "default": "Features"
+    },
+    {
+      "type": "richtext",
+      "id": "features_content",
+      "label": "Features content",
+      "default": "<ul><li>High-quality material</li><li>Careful manufacturing</li><li>Exclusive design</li><li>Available in multiple sizes</li></ul>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_tab",
+      "label": "Show shipping tab",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_title",
+      "label": "Shipping title",
+      "default": "Shipping & Returns"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_content",
+      "label": "Shipping content",
+      "default": "<p><strong>Delivery time:</strong> 10-15 business days</p><p><strong>Shipping costs:</strong> Free worldwide</p><p><strong>Return policy:</strong> Returns accepted within 30 days, guaranteed refund.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dropshipping Product",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

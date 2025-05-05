@@ -2,32 +2,32 @@
 <div class="hero">
   <div class="hero__container">
     <div class="hero__content">
-      <h1 class="hero__title">Créez n'importe quelle expérience commerciale</h1>
+      <h1 class="hero__title">{{ 'main.hero-section.title' | t }}</h1>
       <p class="hero__description">
-        Composez, personnalisez et étendez chaque partie de la pièce commerciale, pixel par pixel.
+        {{ 'main.hero-section.description' | t }}
       </p>
-      <a href="/collections/all" class="hero__button">Voir les produits</a>
+      <a href="/collections/all" class="hero__button">{{ 'main.hero-section.button' | t }}</a>
     </div>
         
     <div class="hero__image-container">
       <div class="hero__image-wrapper">
-        <!-- Image d'arrière-plan avec fondu multiple -->
+        <!-- Background image with multiple fades -->
         <img 
           src="{{ 'pixel-building-background.png' | asset_url }}" 
-          alt="Bâtiment pixel art fond" 
+          alt="Pixel art building background" 
           class="hero__image__background" 
           loading="eager"
         >
         
-        <!-- Image principale avec fondu multiple -->
+        <!-- Main image with layered fades -->
         <img 
           src="{{ 'pixel-building.png' | asset_url }}" 
-          alt="Bâtiment pixel art" 
+          alt="Pixel art building" 
           class="hero__image" 
           loading="eager"
         >
         
-        <!-- Ajout d'effets lumineux subtils -->
+        <!-- Subtle light glow effects -->
         <div class="hero__glow-effect"></div>
       </div>
     </div>

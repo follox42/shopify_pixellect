@@ -19,15 +19,15 @@
     </div>
     
     <div class="featured-product__details">
-      <h2 class="featured-product__title">All products</h2>
+      <h2 class="featured-product__title">{{ 'main.product-section.title' | t }}</h2>
       
       <div class="featured-product__price">
-        <p>Text</p>
+        <p>{{ 'main.product-section.description' | t }}</p>
       </div>
       
       <div class="featured-product__actions">
         <a href="{{ section.settings.button_link | default: '/collections/all' }}" class="featured-product__button">
-          <span class="featured-product__button-text">{{ section.settings.button_text }}</span>
+          <span class="featured-product__button-text">{{ 'main.product-section.button' | t }}</span>
           <span class="featured-product__button-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -43,17 +43,6 @@
 {
   "name": "Featured Product",
   "settings": [
-    {
-      "type": "product",
-      "id": "product",
-      "label": "Select a product"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button text",
-      "default": "View product"
-    },
     {
       "type": "url",
       "id": "button_link",

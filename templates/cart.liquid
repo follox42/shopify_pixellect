@@ -1,23 +1,25 @@
 {% comment %}
-  cart.liquid - Template pour la page panier
+  cart.liquid - Template pour la page panier - Style PIXELLECT minimaliste avec mentions légales
 {% endcomment %}
+
+{{ 'cart.css' | asset_url | stylesheet_tag }}
 
 <div class="cart">
   <div class="cart__container">
     <div class="cart__header">
-      <h1 class="cart__title">Your Cart</h1>
+      <h1 class="cart__title">{{ 'cart.title' | t }}</h1>
     </div>
-    
+
     {% if cart.item_count > 0 %}
       <form action="/cart" method="post" novalidate class="cart__form">
         <div class="cart__items">
           <div class="cart__head">
-            <div class="cart__head-product">Product</div>
-            <div class="cart__head-price">Price</div>
-            <div class="cart__head-quantity">Quantity</div>
-            <div class="cart__head-total">Total</div>
+            <div class="cart__head-product">{{ 'cart.head.product' | t }}</div>
+            <div class="cart__head-price">{{ 'cart.head.price' | t }}</div>
+            <div class="cart__head-quantity">{{ 'cart.head.quantity' | t }}</div>
+            <div class="cart__head-total">{{ 'cart.head.total' | t }}</div>
           </div>
-          
+
           {% for item in cart.items %}
             <div class="cart__item" id="CartItem-{{ item.key }}">
               <div class="cart__item-info">
@@ -35,10 +37,10 @@
                     {{ 'product-1' | placeholder_svg_tag: 'cart__item-img cart__item-img--placeholder' }}
                   {% endif %}
                 </div>
-                
+
                 <div class="cart__item-details">
                   <a href="{{ item.url }}" class="cart__item-title">{{ item.product.title }}</a>
-                  
+
                   {% unless item.product.has_only_default_variant %}
                     <p class="cart__item-variant">
                       {% for option in item.product.options %}
@@ -46,19 +48,19 @@
                       {% endfor %}
                     </p>
                   {% endunless %}
-                  
+
                   {% if item.selling_plan_allocation %}
                     <p class="cart__item-selling-plan">
                       {{ item.selling_plan_allocation.selling_plan.name }}
                     </p>
                   {% endif %}
-                  
+
                   <a href="/cart/change?id={{ item.key }}&quantity=0" class="cart__item-remove">
-                    Remove
+                    {{ 'cart.remove' | t }}
                   </a>
                 </div>
               </div>
-              
+
               <div class="cart__item-price">
                 {% if item.original_price != item.final_price %}
                   <span class="cart__item-price--regular">{{ item.original_price | money }}</span>
@@ -66,24 +68,24 @@
                 {% else %}
                   <span>{{ item.original_price | money }}</span>
                 {% endif %}
-                
+
                 {% if item.line_level_discount_allocations.size > 0 %}
                   <ul class="cart__item-discounts">
-                    {% for discount_allocation in item.line_level_discount_allocations %}
+                    {% for discount in item.line_level_discount_allocations %}
                       <li class="cart__item-discount">
-                        {{ discount_allocation.discount_application.title }}: -{{ discount_allocation.amount | money }}
+                        {{ discount.discount_application.title }}: -{{ discount.amount | money }}
                       </li>
                     {% endfor %}
                   </ul>
                 {% endif %}
               </div>
-              
+
               <div class="cart__item-quantity">
                 <div class="cart__quantity-wrapper">
                   <button type="button" class="cart__quantity-button cart__quantity-decrease" data-action="decrease">
-                    -
+                    {{ 'cart.decrease' | t }}
                   </button>
-                  
+
                   <input 
                     type="number" 
                     name="updates[]" 
@@ -92,15 +94,15 @@
                     id="updates_{{ item.key }}" 
                     class="cart__quantity-input"
                     data-line-item-key="{{ item.key }}"
-                    aria-label="Quantity for {{ item.product.title }}"
+                    aria-label="{{ 'cart.quantity_for' | t }} {{ item.product.title }}"
                   >
-                  
+
                   <button type="button" class="cart__quantity-button cart__quantity-increase" data-action="increase">
-                    +
+                    {{ 'cart.increase' | t }}
                   </button>
                 </div>
               </div>
-              
+
               <div class="cart__item-total">
                 {% if item.original_line_price != item.final_line_price %}
                   <span class="cart__item-total--regular">{{ item.original_line_price | money }}</span>
@@ -112,81 +114,99 @@
             </div>
           {% endfor %}
         </div>
-        
+
         <div class="cart__footer">
-          <div class="cart__special-instructions">
-            <label for="CartSpecialInstructions" class="cart__label">Special instructions for seller</label>
-            <textarea name="note" id="CartSpecialInstructions" class="cart__textarea">{{ cart.note }}</textarea>
-          </div>
-          
           <div class="cart__summary">
             <div class="cart__summary-line">
-              <span class="cart__summary-label">Subtotal</span>
+              <span class="cart__summary-label">{{ 'cart.summary.subtotal' | t }}</span>
               <span class="cart__summary-value">{{ cart.items_subtotal_price | money }}</span>
             </div>
-            
+
             {% if cart.cart_level_discount_applications.size > 0 %}
               <div class="cart__summary-discounts">
-                {% for discount_application in cart.cart_level_discount_applications %}
+                {% for discount in cart.cart_level_discount_applications %}
                   <div class="cart__summary-discount">
-                    <span class="cart__summary-label">{{ discount_application.title }}</span>
-                    <span class="cart__summary-value">-{{ discount_application.total_allocated_amount | money }}</span>
+                    <span class="cart__summary-label">{{ discount.title }}</span>
+                    <span class="cart__summary-value">-{{ discount.total_allocated_amount | money }}</span>
                   </div>
                 {% endfor %}
               </div>
             {% endif %}
-            
+
             <div class="cart__summary-shipping">
-              <span class="cart__summary-label">Shipping</span>
-              <span class="cart__summary-value">Calculated at checkout</span>
+              <span class="cart__summary-label">{{ 'cart.summary.shipping' | t }}</span>
+              <span class="cart__summary-value">{{ 'cart.summary.calculated_at_checkout' | t }}</span>
             </div>
-            
+
             <div class="cart__summary-taxes">
-              <span class="cart__summary-label">Taxes</span>
-              <span class="cart__summary-value">Calculated at checkout</span>
+              <span class="cart__summary-label">{{ 'cart.summary.taxes' | t }}</span>
+              <span class="cart__summary-value">{{ 'cart.summary.calculated_at_checkout' | t }}</span>
             </div>
-            
+
             <div class="cart__summary-total">
-              <span class="cart__summary-label">Total</span>
+              <span class="cart__summary-label">{{ 'cart.summary.total' | t }}</span>
               <span class="cart__summary-value">{{ cart.total_price | money }}</span>
             </div>
-            
+
             <div class="cart__actions">
               <button type="submit" name="update" class="cart__update-button">
-                Update Cart
+                {{ 'cart.update' | t }}
               </button>
-              
+
               <button type="submit" name="checkout" class="cart__checkout-button">
-                Checkout
+                <span>{{ 'cart.checkout' | t }}</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
             </div>
-            
+
+            <div class="cart__legal">
+              <p class="cart__legal-text">
+                {{ 'cart.legal.agree' | t }} 
+                <a href="/policies/refund-policy" class="cart__legal-link">{{ 'cart.legal.refund' | t }}</a>, 
+                <a href="/policies/terms-of-service" class="cart__legal-link">{{ 'cart.legal.terms' | t }}</a> 
+                {{ 'cart.legal.and' | t }} 
+                <a href="/policies/privacy-policy" class="cart__legal-link">{{ 'cart.legal.privacy' | t }}</a>.
+              </p>
+              <p class="cart__legal-text">
+                {{ 'cart.legal.secure_payment' | t }}
+              </p>
+            </div>
+
             <div class="cart__continue">
               <a href="/collections/all" class="cart__continue-link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M11 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                Continue Shopping
+                <span>{{ 'cart.continue_shopping' | t }}</span>
               </a>
             </div>
           </div>
         </div>
       </form>
+
+      <div class="cart__shipping-policy">
+        {% for policy in section.settings.policies %}
+          <div class="cart__policy-item">
+            <div class="cart__policy-icon">{{ policy.icon | raw }}</div>
+            <div class="cart__policy-content">
+              <h4 class="cart__policy-title">{{ policy.title }}</h4>
+              <p class="cart__policy-text">{{ policy.text }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     {% else %}
       <div class="cart__empty">
         <div class="cart__empty-icon">
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 6H22L19 16H6L3 6ZM3 6L2 3H0M8 20C8 20.5523 7.55228 21 7 21C6.44772 21 6 20.5523 6 20C6 19.4477 6.44772 19 7 19C7.55228 19 8 19.4477 8 20ZM19 20C19 20.5523 18.5523 21 18 21C17.4477 21 17 20.5523 17 20C17 19.4477 17.4477 19 18 19C18.5523 19 19 19.4477 19 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <!-- SVG inchangé -->
         </div>
-        <h2 class="cart__empty-title">Your cart is empty</h2>
-        <p class="cart__empty-text">Looks like you haven't added any products to your cart yet.</p>
+        <h2 class="cart__empty-title">{{ 'cart.empty.title' | t }}</h2>
+        <p class="cart__empty-text">{{ 'cart.empty.text' | t }}</p>
         <div class="cart__empty-action">
           <a href="/collections/all" class="cart__empty-button">
-            Start Shopping
+            {{ 'cart.empty.button' | t }}
           </a>
         </div>
       </div>
@@ -194,571 +214,9 @@
   </div>
 </div>
 
-<style>
-.cart {
-  background-color: #0c0d13;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 60px 0;
-  width: 100%;
-  position: relative;
-}
-
-.cart::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(rgba(60, 60, 70, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.cart__container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
-  position: relative;
-  z-index: 2;
-}
-
-.cart__header {
-  margin-bottom: 40px;
-}
-
-.cart__title {
-  font-size: 48px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
-  background: linear-gradient(to bottom, #ffffff 0%, #c0c0c0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  position: relative;
-  display: inline-block;
-  margin: 0;
-}
-
-.cart__title::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.1));
-  border-radius: 3px;
-}
-
-.cart__items {
-  margin-bottom: 40px;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.cart__head {
-  display: grid;
-  grid-template-columns: 3fr 1fr 1fr 1fr;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.cart__head-product {
-  text-align: left;
-}
-
-.cart__head-price, 
-.cart__head-quantity, 
-.cart__head-total {
-  text-align: center;
-}
-
-.cart__item {
-  display: grid;
-  grid-template-columns: 3fr 1fr 1fr 1fr;
-  padding: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  align-items: center;
-}
-
-.cart__item:last-child {
-  border-bottom: none;
-}
-
-.cart__item-info {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.cart__item-image {
-  width: 80px;
-  height: 80px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.cart__item-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.cart__item-details {
-  flex: 1;
-}
-
-.cart__item-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 5px;
-  color: #fff;
-  text-decoration: none;
-  display: block;
-  transition: color 0.3s ease;
-}
-
-.cart__item-title:hover {
-  color: #f0c362;
-}
-
-.cart__item-variant {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 10px;
-}
-
-.cart__item-selling-plan {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 10px;
-}
-
-.cart__item-remove {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
-  text-decoration: none;
-  display: inline-block;
-  transition: color 0.3s ease;
-}
-
-.cart__item-remove:hover {
-  color: #f44336;
-}
-
-.cart__item-price, 
-.cart__item-quantity, 
-.cart__item-total {
-  text-align: center;
-}
-
-.cart__item-price--regular,
-.cart__item-total--regular {
-  text-decoration: line-through;
-  color: rgba(255, 255, 255, 0.5);
-  display: block;
-  font-size: 14px;
-}
-
-.cart__item-price--final,
-.cart__item-total--final {
-  color: #f0c362;
-  font-weight: 600;
-}
-
-.cart__item-discounts {
-  list-style: none;
-  padding: 0;
-  margin: 5px 0 0;
-}
-
-.cart__item-discount {
-  font-size: 12px;
-  color: #f0c362;
-}
-
-.cart__quantity-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 120px;
-  margin: 0 auto;
-}
-
-.cart__quantity-button {
-  width: 36px;
-  height: 36px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 4px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cart__quantity-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.cart__quantity-input {
-  width: 40px;
-  height: 36px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fff;
-  font-size: 16px;
-  text-align: center;
-  -moz-appearance: textfield;
-  margin: 0 5px;
-  border-radius: 4px;
-}
-
-.cart__quantity-input::-webkit-outer-spin-button,
-.cart__quantity-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.cart__footer {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: start;
-}
-
-.cart__special-instructions {
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.cart__label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 10px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.cart__textarea {
-  width: 100%;
-  min-height: 100px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  padding: 12px;
-  color: #fff;
-  font-size: 14px;
-  resize: vertical;
-  transition: border-color 0.3s ease;
-}
-
-.cart__textarea:focus {
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.cart__summary {
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.cart__summary-line,
-.cart__summary-discount,
-.cart__summary-shipping,
-.cart__summary-taxes {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-  font-size: 16px;
-}
-
-.cart__summary-total {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 24px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.cart__actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.cart__update-button {
-  flex: 1;
-  padding: 14px 20px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.cart__update-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.cart__checkout-button {
-  flex: 2;
-  padding: 14px 20px;
-  background-color: #f0c362;
-  border: none;
-  color: #0c0d13;
-  font-size: 16px;
-  font-weight: 700;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-transform: uppercase;
-  position: relative;
-  overflow: hidden;
-}
-
-.cart__checkout-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(
-    rgba(255, 255, 255, 0.1) 0%,
-    transparent 40%,
-    transparent 60%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-  pointer-events: none;
-}
-
-.cart__checkout-button::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(255, 255, 255, 0.2) 50%,
-    transparent 100%
-  );
-  transition: left 0.5s ease;
-}
-
-.cart__checkout-button:hover {
-  background-color: #f8d080;
-  transform: translateY(-2px);
-}
-
-.cart__checkout-button:hover::after {
-  left: 100%;
-}
-
-.cart__checkout-button:active {
-  transform: translateY(1px);
-}
-
-.cart__continue {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.cart__continue-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  font-size: 14px;
-  transition: color 0.3s ease;
-}
-
-.cart__continue-link:hover {
-  color: #fff;
-}
-
-.cart__empty {
-  text-align: center;
-  padding: 60px 20px;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.cart__empty-icon {
-  margin-bottom: 20px;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.cart__empty-title {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #fff;
-}
-
-.cart__empty-text {
-  font-size: 16px;
-  margin-bottom: 30px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.cart__empty-button {
-  display: inline-block;
-  padding: 14px 24px;
-  background-color: #f0c362;
-  color: #0c0d13;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.cart__empty-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(
-    rgba(255, 255, 255, 0.1) 0%,
-    transparent 40%,
-    transparent 60%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-  pointer-events: none;
-}
-
-.cart__empty-button:hover {
-  background-color: #f8d080;
-  transform: translateY(-2px);
-}
-
-@media screen and (max-width: 991px) {
-  .cart {
-    padding: 40px 0;
-  }
-  
-  .cart__title {
-    font-size: 36px;
-  }
-  
-  .cart__footer {
-    grid-template-columns: 1fr;
-  }
-  
-  .cart__special-instructions {
-    order: 2;
-  }
-  
-  .cart__summary {
-    order: 1;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .cart__title {
-    font-size: 28px;
-  }
-  
-  .cart__head {
-    display: none;
-  }
-  
-  .cart__item {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .cart__item-info {
-    grid-column: 1;
-  }
-  
-  .cart__item-price, 
-  .cart__item-quantity, 
-  .cart__item-total {
-    text-align: left;
-    display: flex;
-    align-items: center;
-  }
-  
-  .cart__item-price::before {
-    content: "Price: ";
-    margin-right: 5px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
-    min-width: 80px;
-  }
-  
-  .cart__item-quantity::before {
-    content: "Quantity: ";
-    margin-right: 5px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
-    min-width: 80px;
-  }
-  
-  .cart__item-total::before {
-    content: "Total: ";
-    margin-right: 5px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
-    min-width: 80px;
-  }
-  
-  .cart__quantity-wrapper {
-    margin: 0;
-  }
-  
-  .cart__actions {
-    flex-direction: column;
-  }
-}
-</style>
-
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Handle quantity buttons
+    // Gestion des boutons de quantité
     const quantityButtons = document.querySelectorAll('.cart__quantity-button');
     
     if (quantityButtons.length > 0) {
@@ -778,60 +236,21 @@
             input.value = currentValue + 1;
           }
           
-          // Trigger change event
+          // Déclencher l'événement change
           input.dispatchEvent(new Event('change'));
         });
       });
     }
     
-    // Handle quantity input changes - optional Ajax update
+    // Gestion des changements de quantité
     const quantityInputs = document.querySelectorAll('.cart__quantity-input');
     
     if (quantityInputs.length > 0) {
       quantityInputs.forEach(function(input) {
         input.addEventListener('change', function() {
-          // If you want to add ajax cart updates, you can add the code here
-          // This would update the cart without refreshing the page
-          
-          // Example of how to implement ajax cart updates:
-          /*
-          const lineItemKey = this.getAttribute('data-line-item-key');
-          const newQuantity = parseInt(this.value);
-          
-          // Create a loading state
-          const cartItem = document.getElementById('CartItem-' + lineItemKey);
-          cartItem.classList.add('is-loading');
-          
-          // Update cart using fetch
-          fetch('/cart/change.js', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              id: lineItemKey,
-              quantity: newQuantity
-            })
-          })
-          .then(response => response.json())
-          .then(cart => {
-            // Update cart UI with the new cart data
-            updateCartUI(cart);
-            cartItem.classList.remove('is-loading');
-          })
-          .catch(error => {
-            console.error('Error updating cart:', error);
-            cartItem.classList.remove('is-loading');
-          });
-          */
+          // Si vous souhaitez ajouter des mises à jour ajax du panier, le code peut être ajouté ici
         });
       });
-    }
-    
-    // Function to update cart UI (for ajax updates)
-    function updateCartUI(cart) {
-      // Update cart item quantities, totals, etc.
-      // This would be implemented if you're using ajax cart updates
     }
   });
 </script>

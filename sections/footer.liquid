@@ -1,20 +1,20 @@
 {% comment %}
-  footer.liquid - Section pour le pied de page du site
+  footer.liquid - Section pour le pied de page du site avec animations
 {% endcomment %}
 {{ 'footer.css' | asset_url | stylesheet_tag }}
 <footer class="footer">
   <div class="footer__container">
     <!-- Section Logo et Description -->
-    <div class="footer__column footer__branding">
+    <div class="footer__column footer__branding footer-animate">
       <a href="/" class="footer__logo-link">
         {% if section.settings.footer_logo != blank %}
           <img src="{{ section.settings.footer_logo | img_url: 'medium' }}" alt="{{ shop.name }}" class="footer__logo-image">
         {% else %}
-          <span class="footer__logo-text">{{ section.settings.logo_text | default: shop.name }}</span>
+          <span class="footer__logo-text">{{ shop.name }}</span>
         {% endif %}
       </a>
       <div class="footer__description">
-        {{ section.settings.footer_description }}
+        {{ 'footer.footer_description' | t }}
       </div>
       
       <!-- Réseaux sociaux -->
@@ -85,43 +85,50 @@
       </div>
     </div>
     
-    <!-- Liens de navigation -->
-    <div class="footer__column footer__nav-container">
-      <div class="footer__nav-section">
-        <h3 class="footer__heading">{{ section.settings.menu1_heading }}</h3>
-        {% if section.settings.footer_menu1 != blank %}
-          <ul class="footer__nav-list">
-            {% for link in linklists[section.settings.footer_menu1].links %}
-              <li class="footer__nav-item">
-                <a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a>
-              </li>
-            {% endfor %}
-          </ul>
+    <!-- Liens rapides -->
+    <div class="footer__column footer__quicklinks footer-animate" data-delay="100">
+      <h3 class="footer__heading">{{ 'footer.quick-links' | t }}</h3>
+      <ul class="footer__menu">
+        {% if shop.privacy_policy %}
+          <li class="footer__menu-item">
+            <a href="{{ shop.privacy_policy.url }}" class="footer__menu-link">
+              {{ 'footer.privacy-policy' | t }}
+            </a>
+          </li>
         {% endif %}
-      </div>
-      
-      <div class="footer__nav-section">
-        <h3 class="footer__heading">{{ section.settings.menu2_heading }}</h3>
-        {% if section.settings.footer_menu2 != blank %}
-          <ul class="footer__nav-list">
-            {% for link in linklists[section.settings.footer_menu2].links %}
-              <li class="footer__nav-item">
-                <a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a>
-              </li>
-            {% endfor %}
-          </ul>
+        
+        {% if shop.refund_policy %}
+          <li class="footer__menu-item">
+            <a href="{{ shop.refund_policy.url }}" class="footer__menu-link">
+              {{ 'refund-policy' | t }}
+            </a>
+          </li>
         {% endif %}
-      </div>
+        
+        {% if shop.terms_of_service %}
+          <li class="footer__menu-item">
+            <a href="{{ shop.terms_of_service.url }}" class="footer__menu-link">
+              {{ 'terms-of-service' | t }}
+            </a>
+          </li>
+        {% endif %}
+        
+        <li class="footer__menu-item">
+          <a href="/pages/contact" class="footer__menu-link">
+            {{ 'footer.contact' | t }}
+          </a>
+        </li>
+      </ul>
     </div>
     
     <!-- Newsletter -->
-    <div class="footer__column footer__newsletter">
+    <div class="footer__column footer__newsletter footer-animate" data-delay="200">
+      {% if section.settings.show_newsletter %}
       <h3 class="footer__heading">{{ section.settings.newsletter_heading }}</h3>
       <div class="footer__newsletter-text">
         {{ section.settings.newsletter_text }}
       </div>
       
-      {% if section.settings.show_newsletter %}
         <div class="footer__newsletter-form">
           {% form 'customer', id: 'newsletter-form' %}
             <input type="hidden" name="contact[tags]" value="newsletter">
@@ -164,10 +171,10 @@
   </div>
   
   <!-- Bottom Section with Legal Links -->
-  <div class="footer__bottom">
+  <div class="footer__bottom footer-animate" data-delay="300">
     <div class="footer__bottom-container">
       <div class="footer__copyright">
-        &copy; {{ 'now' | date: "%Y" }} {{ section.settings.copyright_text | default: shop.name }}. {{ section.settings.rights_text }}
+        &copy; {{ 'now' | date: "%Y" }} {{ section.settings.copyright_text | default: shop.name }}. {{ 'footer.rights-text' | t }}
       </div>
       
       <div class="footer__legal">
@@ -175,19 +182,19 @@
           {% if section.settings.show_policy_links %}
             {% if shop.privacy_policy %}
               <li class="footer__legal-item">
-                <a href="{{ shop.privacy_policy.url }}" class="footer__legal-link">{{ section.settings.privacy_text | default: shop.privacy_policy.title }}</a>
+                <a href="{{ shop.privacy_policy.url }}" class="footer__legal-link">{{ 'footer.privacy-policy' | t }}</a>
               </li>
             {% endif %}
             
             {% if shop.terms_of_service %}
               <li class="footer__legal-item">
-                <a href="{{ shop.terms_of_service.url }}" class="footer__legal-link">{{ section.settings.terms_text | default: shop.terms_of_service.title }}</a>
+                <a href="{{ shop.terms_of_service.url }}" class="footer__legal-link">{{ 'terms-of-service' | t }}</a>
               </li>
             {% endif %}
             
             {% if shop.refund_policy %}
               <li class="footer__legal-item">
-                <a href="{{ shop.refund_policy.url }}" class="footer__legal-link">{{ section.settings.refund_text | default: shop.refund_policy.title }}</a>
+                <a href="{{ shop.refund_policy.url }}" class="footer__legal-link">{{ 'refund-policy' | t }}</a>
               </li>
             {% endif %}
           {% endif %}
@@ -196,7 +203,7 @@
       
       {% if section.settings.show_payment_icons %}
         <div class="footer__payment">
-          <span class="footer__payment-text">{{ section.settings.payment_text }}</span>
+          <span class="footer__payment-text">{{ "footer.payment-text" | t }}</span>
           <ul class="footer__payment-list">
             {% for type in shop.enabled_payment_types %}
               <li class="footer__payment-item">
@@ -210,6 +217,125 @@
   </div>
 </footer>
 
+<style>
+/* CSS pour la section des liens rapides */
+.footer__quicklinks {
+  margin-bottom: 20px;
+}
+
+.footer__heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f0c362;
+  margin-bottom: 20px;
+}
+
+.footer__menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer__menu-item {
+  margin-bottom: 12px;
+}
+
+.footer__menu-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.footer__menu-link:hover {
+  color: #f0c362;
+}
+
+/* Style des moyens de paiement */
+.footer__payment-text {
+  display: block;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 12px;
+}
+
+.footer__payment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer__payment-item {
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.footer__payment-item:hover {
+  opacity: 1;
+}
+
+/* Animation des éléments du footer */
+.footer-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.footer-animate.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media screen and (max-width: 767px) {
+  .footer__payment-icon {
+    width: 36px;
+    height: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-animate {
+    transition: none;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Observer pour l'animation des éléments du footer
+  const animateElements = document.querySelectorAll('.footer-animate');
+  
+  if (animateElements.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const delay = element.getAttribute('data-delay') || 0;
+          
+          setTimeout(() => {
+            element.classList.add('animated');
+          }, delay);
+          
+          // Une fois animé, on arrête d'observer
+          observer.unobserve(element);
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    });
+    
+    // Observer chaque élément à animer
+    animateElements.forEach(element => {
+      observer.observe(element);
+    });
+  }
+});
+</script>
+
 {% schema %}
 {
   "name": "Footer",
@@ -222,12 +348,6 @@
       "type": "image_picker",
       "id": "footer_logo",
       "label": "Logo"
-    },
-    {
-      "type": "text",
-      "id": "logo_text",
-      "label": "Logo texte (si pas d'image)",
-      "default": "PIXELLECT"
     },
     {
       "type": "richtext",
@@ -273,7 +393,7 @@
       "type": "checkbox",
       "id": "show_newsletter",
       "label": "Afficher le formulaire d'abonnement",
-      "default": true
+      "default": false
     },
     {
       "type": "text",

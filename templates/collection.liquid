@@ -1,6 +1,7 @@
 {% comment %}
-  collection.liquid - Template pour la page des collections/produits
+  collection.liquid - Template pour la page des collections/produits (i18n)
 {% endcomment %}
+{{ 'collection.css' | asset_url | stylesheet_tag }}
 
 <div class="collection">
   <div class="collection__header">
@@ -11,27 +12,30 @@
       {% if collection.description != blank %}
         {{ collection.description }}
       {% else %}
-        <p>Explore our collection of pixel-inspired products</p>
+        <p>{{ 'collection.empty_description' | t }}</p>
       {% endif %}
     </div>
   </div>
 
   <div class="collection__toolbar">
     <div class="collection__sort">
-      <label for="SortBy" class="collection__sort-label">Sort by</label>
+      <label for="SortBy" class="collection__sort-label">
+        {{ 'collection.sort_by' | t }}
+      </label>
       <select id="SortBy" class="collection__sort-select">
-        <option value="manual">Featured</option>
-        <option value="price-ascending">Price: Low to High</option>
-        <option value="price-descending">Price: High to Low</option>
-        <option value="title-ascending">A-Z</option>
-        <option value="title-descending">Z-A</option>
-        <option value="created-ascending">Oldest to Newest</option>
-        <option value="created-descending">Newest to Oldest</option>
+        <option value="manual">{{ 'collection.sort.manual' | t }}</option>
+        <option value="price-ascending">{{ 'collection.sort.price_asc' | t }}</option>
+        <option value="price-descending">{{ 'collection.sort.price_desc' | t }}</option>
+        <option value="title-ascending">{{ 'collection.sort.title_asc' | t }}</option>
+        <option value="title-descending">{{ 'collection.sort.title_desc' | t }}</option>
+        <option value="created-ascending">{{ 'collection.sort.oldest' | t }}</option>
+        <option value="created-descending">{{ 'collection.sort.newest' | t }}</option>
       </select>
     </div>
     
     <div class="collection__count">
-      <span class="collection__count-number">{{ collection.products_count }}</span> products
+      <span class="collection__count-number">{{ collection.products_count }}</span>
+      {{ 'collection.count_label' | t }}
     </div>
   </div>
 
@@ -57,9 +61,11 @@
             
             <div class="product-card__price">
               {% if product.price_varies %}
-                <span class="product-card__price-from">From </span>
+                <span class="product-card__price-from">
+                  {{ 'collection.price_from' | t }}
+                </span>
               {% endif %}
-              {{ product.price | money | forma}}
+              {{ product.price | money }}
             </div>
           </a>
           
@@ -68,12 +74,12 @@
               <form method="post" action="/cart/add" class="product-card__form">
                 <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
                 <button type="submit" class="product-card__add-button">
-                  ADD TO CART
+                  {{ 'collection.add_to_cart' | t }}
                 </button>
               </form>
             {% else %}
               <button class="product-card__sold-button" disabled>
-                SOLD OUT
+                {{ 'collection.sold_out' | t }}
               </button>
             {% endif %}
           </div>
@@ -81,7 +87,7 @@
       </div>
     {% else %}
       <div class="collection__empty">
-        <p>No products found in this collection</p>
+        <p>{{ 'collection.no_products' | t }}</p>
       </div>
     {% endfor %}
   </div>
@@ -89,309 +95,23 @@
   {% if paginate.pages > 1 %}
     <div class="collection__pagination">
       {% if paginate.previous %}
-        <a href="{{ paginate.previous.url }}" class="collection__pagination-link">&#9664; Previous</a>
+        <a href="{{ paginate.previous.url }}" class="collection__pagination-link">
+          &#9664; {{ 'collection.prev' | t }}
+        </a>
       {% endif %}
       
-      <span class="collection__pagination-current">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+      <span class="collection__pagination-current">
+        {{ 'collection.page' | t: current: paginate.current_page, total: paginate.pages }}
+      </span>
       
       {% if paginate.next %}
-        <a href="{{ paginate.next.url }}" class="collection__pagination-link">Next &#9654;</a>
+        <a href="{{ paginate.next.url }}" class="collection__pagination-link">
+          {{ 'collection.next' | t }} &#9654;
+        </a>
       {% endif %}
     </div>
   {% endif %}
 </div>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-.collection {
-  font-family: 'Montserrat', sans-serif;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 60px 0;
-  width: 100%;
-}
-
-.collection__header {
-  max-width: 1280px;
-  margin: 0 auto 40px;
-  padding: 0 24px;
-  text-align: center;
-}
-
-.collection__title {
-  font-size: 5em;
-  font-weight: 700;
-  margin-bottom: 16px;
-  background-image: 
-    url('{{ "texture.png" | asset_url }}'),
-    linear-gradient(to bottom, rgba(236, 169, 91, 0.3), rgba(112, 64, 24, 0.8));
-  background-blend-mode: overlay;
-  
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  text-transform: uppercase;
-  font-family: "Pixelify Sans", sans-serif;
-  letter-spacing: 2px;
-  position: relative;
-  display: inline-block;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.collection__description {
-  font-family: ;
-  font-size: 2em;
-  line-height: 1.6;
-  max-width: 700px;
-  margin: 0 auto;
-  color: #f0c362;
-}
-
-.collection__toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1280px;
-  margin: 0 auto 30px;
-  padding: 0 24px;
-}
-
-.collection__sort {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.collection__sort-label {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-.collection__sort-select {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.collection__count {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-.collection__count-number {
-  font-weight: 700;
-  color: #f0c362;
-}
-
-.collection__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.product-card {
-  background-image: url('{{ "grain-dark.png" | asset_url }}');
-  background-position: center;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-  max-height: 800px;
-  height: 100%;
-}
-
-.product-card__inner {
-  display: flex;
-  flex-direction: column;
-  height: 80%;
-  width: 80%;
-}
-
-.product-card__link {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  height: 70%;
-}
-
-.product-card__image-wrapper {
-  position: relative;
-}
-
-.product-card__image {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  filter: drop-shadow(1px 1px 1px rgba(0,0,0,100));
-  max-height: 240px;
-  transition: transform 0.5s ease;
-}
-
-.product-card:hover .product-card__image {
-  transform: scale(1.03) rotate(1deg);
-}
-
-.product-card__title {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #edc986;
-  filter: drop-shadow(1px 1px 1px rgba(0,0,0,100));
-  text-align: center;
-}
-
-.product-card__price {
-  font-size: 20px;
-  font-weight: 500;
-  color: rgba(240,171,75,255);
-  filter: drop-shadow(1px 1px 1px rgba(0,0,0,100));
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.product-card__price-from {
-  font-size: 16px;
-  opacity: 0.8;
-}
-
-.product-card__actions {
-  margin-top: auto;
-}
-
-.product-card__form {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.product-card__add-button {
-  font-size: 12px;
-  padding: 12px 24px;
-  color: #f4a623;
-  background-color: #1b1b1b;
-  border: 3px solid #2d2d2d;
-  box-shadow:
-    0 0 0 2px #040503,
-    inset 0 0 0 2px #000,
-    5px 5px 5px #f4a7232d;
-  text-shadow: 0 0 4px #f4a623aa;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.product-card__add-button:hover {
-  background-color: #2b2b2b;
-  box-shadow:
-    0 0 0 2px #000,
-    inset 0 0 0 2px #000,
-    1px 1px 2px #f4a623;
-  color: #ffd580;
-}
-
-.product-card__add-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.product-card__sold-button {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.5);
-  border-color: rgba(255, 255, 255, 0.1);
-  cursor: not-allowed;
-}
-
-.collection__empty {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 40px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-}
-
-.collection__pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  max-width: 1280px;
-  margin: 40px auto 0;
-  padding: 0 24px;
-}
-
-.collection__pagination-link {
-  color: #f0c362;
-  text-decoration: none;
-  border: 1px solid rgba(240, 195, 98, 0.3);
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-
-.collection__pagination-link:hover {
-  background-color: rgba(240, 195, 98, 0.1);
-}
-
-.collection__pagination-current {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-@media screen and (max-width: 991px) {
-  .collection__title {
-    font-size: 5em;
-  }
-  
-  .collection__description {
-    font-size: 18px;
-  }
-  
-  .collection__grid {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .collection {
-    padding: 40px 0;
-  }
-  
-  .collection__title {
-    font-size: 3em;
-  }
-  
-  .collection__description {
-    font-size: 16px;
-  }
-  
-  .collection__toolbar {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
-  }
-  
-  .collection__grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  
-  .product-card__title {
-    font-size: 18px;
-  }
-}
-</style>
 
 <script>
 // Gestion du tri de la collection
@@ -399,34 +119,28 @@ document.addEventListener('DOMContentLoaded', function() {
   var sortBySelect = document.getElementById('SortBy');
   
   if (sortBySelect) {
-    // Set select to current sort value
     if (window.location.search.includes('sort_by=')) {
       var urlParams = new URLSearchParams(window.location.search);
       sortBySelect.value = urlParams.get('sort_by');
     }
     
-    // Update URL when select changes
     sortBySelect.addEventListener('change', function() {
       var url = new URL(window.location.href);
       var params = new URLSearchParams(url.search);
       
       params.set('sort_by', this.value);
       url.search = params.toString();
-      
       window.location.href = url.toString();
     });
   }
   
   // Animation hover pour les boutons
-  var productCards = document.querySelectorAll('.product-card');
-  productCards.forEach(function(card) {
+  document.querySelectorAll('.product-card').forEach(function(card) {
     card.addEventListener('mouseenter', function() {
-      var button = this.querySelector('.product-card__add-button');
-      if (button) {
-        button.style.animation = 'none';
-        setTimeout(function() {
-          button.style.animation = '';
-        }, 10);
+      var btn = this.querySelector('.product-card__add-button');
+      if (btn) {
+        btn.style.animation = 'none';
+        setTimeout(function() { btn.style.animation = ''; }, 10);
       }
     });
   });

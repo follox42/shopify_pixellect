@@ -1,10 +1,120 @@
 {
-    "General": {
-        "add_to_cart": "Add to cart"
-    },
+    "General": {},
     "header": {
         "products": "Produits",
-        "about_me": "À propos",
         "contact": "Contact"
+    },
+    "footer": {
+        "footer_description": "Créations en pixel art uniques pour sublimer votre espace. Des produits nostalgiques et élégants fabriqués avec passion.",
+        "quick-links": "Liens rapides",
+        "privacy-policy": "Politique de confidentialité",
+        "refund-policy": "Politique de remboursement",
+        "terms-of-service": "Conditions d’utilisation",
+        "contact": "Nous contacter",
+        "rights-text": "Tous droits réservés.",
+        "payment-text": "Paiement 100% sécurisé"
+    },
+    "main": {
+        "hero-section": {
+            "title": "Plongez dans l’univers Pixel",
+            "description": "Découvrez notre collection exclusive de décorations inspirées du pixel art, d’accessoires console rétro et bien plus...",
+            "button": "Je commence l’aventure"
+        },
+        "product-section": {
+            "title": "Tous nos produits",
+            "description": "Explorez notre sélection de pièces uniques, de lampes rétroéclairées et d’accessoires gaming pour personnaliser votre espace.",
+            "button": "Voir la collection"
+        },
+        "level-up": {
+            "title": "Donnez vie à votre décor",
+            "description": "Apportez une touche de nostalgie et de modernité grâce à nos créations pixel art exclusives et nos lampes RGB dynamiques.",
+            "button": "Voir nos créations"
+        }
+    },
+    "products": {},
+    "contact": {
+        "title": "Contactez-nous",
+        "description": "Une question, un retour ou un projet à discuter ? Envoyez-nous un message !",
+        "lenom": "Votre nom",
+        "lemail": "Votre e-mail",
+        "lemessage": "Votre message",
+        "button": "Envoyer",
+        "image_alt": "Illustration pixel art du formulaire"
+    },
+    "product-template": {
+        "quantity_label": "Quantité",
+        "decrease": "-",
+        "increase": "+",
+        "promo_badge": "OFFRE LIMITÉE",
+        "timer_days": "Jours",
+        "timer_hours": "Heures",
+        "timer_minutes": "Minutes",
+        "timer_seconds": "Secondes",
+        "add_to_cart": "Ajouter au panier",
+        "sold_out": "Épuisé",
+        "benefit_shipping": "Livraison mondiale",
+        "benefit_text_shipping": "Suivi sous 10-15 jours",
+        "benefit_guarantee": "Satisfait ou remboursé",
+        "benefit_text_guarantee": "Remboursement sous 30 jours",
+        "benefit_payment": "Paiement sécurisé",
+        "benefit_text_payment": "Transactions 100% sécurisées",
+        "trust_title": "Méthodes de paiement",
+        "tab_description": "Description",
+        "tab_features": "Caractéristiques",
+        "tab_shipping": "Livraison & Retours"
+    },
+    "cart": {
+        "title": "Votre panier",
+        "head": {
+            "product": "Produit",
+            "price": "Prix",
+            "quantity": "Quantité",
+            "total": "Total"
+        },
+        "remove": "Supprimer",
+        "decrease": "-",
+        "increase": "+",
+        "quantity_for": "Quantité pour",
+        "summary": {
+            "subtotal": "Sous-total",
+            "shipping": "Livraison",
+            "taxes": "Taxes",
+            "total": "Total",
+            "calculated_at_checkout": "Calculé à la caisse"
+        },
+        "update": "Mettre à jour",
+        "checkout": "Passer à la caisse",
+        "legal": {
+            "agree": "En passant votre commande, vous acceptez nos",
+            "refund": "politiques de remboursement",
+            "terms": "conditions générales de vente",
+            "and": "et notre",
+            "privacy": "politique de confidentialité",
+            "secure_payment": "Paiement 100% sécurisé par Shopify Payments. Remboursement sous 14 jours."
+        },
+        "continue_shopping": "Continuer vos achats",
+        "empty": {
+            "title": "Votre panier est vide",
+            "text": "Vous n'avez pas encore ajouté de produits à votre panier.",
+            "button": "Commencer vos achats"
+        }
+    },
+    "password": {
+        "coming_soon": "Ouverture prochaine",
+        "store_message": "Notre boutique est en cours de préparation. Nous serons bientôt en ligne avec nos créations pixel art exclusives !",
+        "form": {
+            "password": "Mot de passe",
+            "submit": "Entrer",
+            "error": "Mot de passe incorrect. Veuillez réessayer."
+        },
+        "contact_info": "Vous avez des questions ? Contactez-nous à",
+        "share": "Suivez nos réseaux sociaux",
+        "store_owner": "Connexion propriétaire",
+        "login_form": {
+            "title": "Connexion administration",
+            "password": "Mot de passe",
+            "submit": "Connexion",
+            "cancel": "Annuler"
+        }
     }
 }
