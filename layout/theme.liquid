@@ -3,8 +3,14 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="4U2csTUpTmWfQDIAO0a3zDxHLFStzRyt0YiKYqP4MKs" />
     <title>{{ page_title | escape }}</title>
+    <link rel="preload" href="{{ 'pixel-building-background.png' | asset_url }}" as="image">
+    <link rel="preload" href="{{ 'pixel-building.png' | asset_url }}" as="image">
     <link rel="canonical" href="{{ canonical_url }}">
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" href="{{ settings.favicon | image_url: width: 32 }}" type="image/png">
+    {%- endif -%}
 
     {%- if page_description -%}
       <meta name="description" content="{{ page_description | escape }}">

@@ -1,4 +1,5 @@
 {{ 'hero-section.css' | asset_url | stylesheet_tag }}
+
 <div class="hero">
   <div class="hero__container">
     <div class="hero__content">
@@ -13,18 +14,24 @@
       <div class="hero__image-wrapper">
         <!-- Background image with multiple fades -->
         <img 
-          src="{{ 'pixel-building-background.png' | asset_url }}" 
+          src="{{ 'pixel-building-background.webp' | asset_url }}" 
           alt="Pixel art building background" 
           class="hero__image__background" 
+          width="110%"
+          height="auto"
           loading="eager"
+          decoding="async"
         >
         
         <!-- Main image with layered fades -->
         <img 
-          src="{{ 'pixel-building.png' | asset_url }}" 
+          src="{{ 'pixel-building.webp' | asset_url }}" 
           alt="Pixel art building" 
           class="hero__image" 
+          width="100%"
+          height="auto"
           loading="eager"
+          decoding="async"
         >
         
         <!-- Subtle light glow effects -->

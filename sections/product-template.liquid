@@ -55,12 +55,12 @@
       
       <div class="product__price-container">
         <span class="product__price {% if product.compare_at_price > product.price %}product__price--sale{% endif %}" id="ProductPrice">
-          {{ product.price | money }}
+          {{ product.price | money_with_currency }}
         </span>
         
         {% if product.compare_at_price > product.price %}
           <span class="product__price--compare" id="ComparePrice">
-            {{ product.compare_at_price | money }}
+            {{ product.compare_at_price | money_with_currency }}
           </span>
           
           {% assign discount_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
@@ -70,6 +70,9 @@
 
       <!-- Purchase Form -->
       {% form 'product', product, id: 'AddToCartForm', class: 'product__form' %}
+        <!-- CORRECTION AJOUTÉE ICI: Input caché avec l'ID de la variante -->
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="VariantId">
+        
         {% if product.variants.size > 1 %}
           <div class="product__variants">
             {% for option in product.options_with_values %}
@@ -409,17 +412,6 @@
     border-radius: 2px;
   }
   
-  /* Animations */
-  .product-animate {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
-  .product-animate.animated {
-    opacity: 1;
-    transform: translateY(0);
-  }
 
   @media (prefers-reduced-motion: reduce) {
     .product-animate {
@@ -569,6 +561,9 @@
       // Get variant selectors
       const variantSelectors = document.querySelectorAll('.product__select');
       
+      // Get variant ID input (CORRECTION AJOUTÉE)
+      const variantIdInput = document.getElementById('VariantId');
+      
       // Function to format money consistently with Shopify
       function formatMoney(cents) {
         return (cents / 100).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
@@ -578,6 +573,11 @@
       function updatePrice(variant) {
         if (!variant) {
           return;
+        }
+        
+        // Update the variant ID input value (CORRECTION AJOUTÉE)
+        if (variantIdInput) {
+          variantIdInput.value = variant.id;
         }
         
         // Update the displayed price
