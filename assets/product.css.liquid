@@ -37,12 +37,12 @@
   gap: 60px;
 }
 
-/* Enhanced Discount UI */
+/* Enhanced Discount UI - Fixed for header overlap */
 .product__floating-discount {
   position: fixed;
-  top: 20px;
+  top: 100px; /* Increased from 20px to place below headers */
   right: 20px;
-  z-index: 100;
+  z-index: 90; /* Lower z-index so header stays on top */
   background-color: rgba(15, 15, 20, 0.85);
   border: 1px solid rgba(240, 195, 98, 0.3);
   border-radius: 6px;
@@ -55,6 +55,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* Adjust positioning based on screen size for better header clearance */
+@media screen and (min-width: 992px) {
+  .product__floating-discount {
+    top: 100px; /* Ensure enough space below header on desktop */
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .product__floating-discount {
+    top: 120px; /* More space on larger screens */
+  }
 }
 
 .product__floating-discount.active {
@@ -822,7 +835,7 @@
   }
   
   .product__floating-discount {
-    top: 10px;
+    top: 80px; /* Adjusted for smaller screens */
     right: 10px;
     max-width: 220px;
     padding: 12px;
