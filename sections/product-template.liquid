@@ -1,9 +1,39 @@
 {% comment %}
-  product.liquid - Template optimized for dropshipping with PIXELLECT style - Internationalized
+  product.liquid - Enhanced for dropshipping with improved discounts & mobile responsiveness
 {% endcomment %}
 {{ 'product.css' | asset_url | stylesheet_tag }}
 
+<script>
+  // Add js-enabled class to html element to enable animations only when JS works
+  document.documentElement.className += ' js-enabled';
+  
+  // Fallback to ensure content visibility if animation script fails
+  window.setTimeout(function() {
+    if (document.querySelectorAll('.product-animate:not(.animated)').length > 0) {
+      document.querySelectorAll('.product-animate').forEach(function(el) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
+  }, 1000);
+</script>
+
 <div class="product">
+  {% if product.compare_at_price > product.price %}
+  <div class="product__floating-discount">
+    {% assign discount_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+    <span class="product__discount-badge">-{{ discount_percentage }}%</span>
+    {% if section.settings.show_promo_timer %}
+      <div class="product__discount-timer" data-end-time="{{ section.settings.promo_end_time }}">
+        <span class="product__discount-timer-text">{{ section.settings.ends_in_text }}</span>
+        <div class="product__discount-countdown">
+          <span data-hours>00</span>:<span data-minutes>00</span>:<span data-seconds>00</span>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
   <div class="product__container">
     <!-- Product Gallery -->
     <div class="product__gallery product-animate">
@@ -15,16 +45,29 @@
             id="ProductMainImage"
             class="product__main-image"
             data-zoom-image="{{ product.featured_media | img_url: '1200x' }}"
+            {% if product.media.size > 1 %}data-index="0"{% endif %}
           >
           
           {% if product.media.size > 1 %}
-            <div class="product__image-zoom">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 3H21V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9 21H3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M21 3L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M3 21L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+            <div class="product__image-controls">
+              <button class="product__image-control product__image-prev" aria-label="{{ 'product-template.previous_image' | t }}">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="product__image-zoom">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 3H21V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 21H3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21 3L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M3 21L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <button class="product__image-control product__image-next" aria-label="{{ 'product-template.next_image' | t }}">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
             </div>
           {% endif %}
         {% else %}
@@ -35,16 +78,22 @@
       {% if product.media.size > 1 %}
         <div class="product__thumbnails">
           {% for media in product.media %}
-            <div class="product__thumbnail {% if forloop.first %}is-active{% endif %}" data-media-id="{{ media.id }}">
+            <div class="product__thumbnail {% if forloop.first %}is-active{% endif %}" data-media-id="{{ media.id }}" data-index="{{ forloop.index0 }}">
               <img 
                 src="{{ media | img_url: '150x' }}" 
                 alt="{{ media.alt | escape }}"
                 class="product__thumbnail-image"
                 data-full-image="{{ media | img_url: 'large' }}"
                 data-zoom-image="{{ media | img_url: '1200x' }}"
+                loading="lazy"
               >
             </div>
           {% endfor %}
+        </div>
+        <div class="product__thumbnails-navigation">
+          <span class="product__thumbnails-indicator">
+            <span class="current">1</span>/<span class="total">{{ product.media.size }}</span>
+          </span>
         </div>
       {% endif %}
     </div>
@@ -70,7 +119,6 @@
 
       <!-- Purchase Form -->
       {% form 'product', product, id: 'AddToCartForm', class: 'product__form' %}
-        <!-- CORRECTION AJOUTÉE ICI: Input caché avec l'ID de la variante -->
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="VariantId">
         
         {% if product.variants.size > 1 %}
@@ -106,9 +154,7 @@
             {{ 'product-template.quantity_label' | t }}
           </label>
           <div class="product__quantity-wrapper">
-            <button type="button" class="product__quantity-button product__quantity-decrease" data-action="decrease">
-              {{ 'product-template.decrease' | t }}
-            </button>
+            <button type="button" class="product__quantity-button product__quantity-decrease" data-action="decrease"></button>
             <input 
               type="number" 
               id="Quantity" 
@@ -117,9 +163,7 @@
               min="1" 
               class="product__quantity-input"
             >
-            <button type="button" class="product__quantity-button product__quantity-increase" data-action="increase">
-              {{ 'product-template.increase' | t }}
-            </button>
+            <button type="button" class="product__quantity-button product__quantity-increase" data-action="increase"></button>
           </div>
         </div>
         
@@ -144,6 +188,12 @@
                 <span class="product__timer-value" data-seconds>00</span>
                 <span class="product__timer-label">{{ 'product-template.timer_seconds' | t }}</span>
               </div>
+            </div>
+            <div class="product__stock-indicator">
+              <div class="product__stock-bar">
+                <div class="product__stock-progress" style="width: {{ section.settings.stock_level_percentage }}%"></div>
+              </div>
+              <div class="product__stock-text">{{ section.settings.stock_message }}</div>
             </div>
           </div>
         {% endif %}
@@ -181,8 +231,8 @@
             </svg>
           </div>
           <div class="product__benefit-content">
-            <h4 class="product__benefit-title">{{ 'product-template.benefit_shipping' | t }}</h4>
-            <p class="product__benefit-text">{{ 'product-template.benefit_text_shipping' | t }}</p>
+            <h4 class="product__benefit-title">{{ section.settings.shipping_title }}</h4>
+            <p class="product__benefit-text">{{ section.settings.shipping_text }}</p>
           </div>
         </div>
         <div class="product__benefit-item">
@@ -193,8 +243,8 @@
             </svg>
           </div>
           <div class="product__benefit-content">
-            <h4 class="product__benefit-title">{{ 'product-template.benefit_guarantee' | t }}</h4>
-            <p class="product__benefit-text">{{ 'product-template.benefit_text_guarantee' | t }}</p>
+            <h4 class="product__benefit-title">{{ section.settings.guarantee_title }}</h4>
+            <p class="product__benefit-text">{{ section.settings.guarantee_text }}</p>
           </div>
         </div>
         <div class="product__benefit-item">
@@ -204,8 +254,8 @@
             </svg>
           </div>
           <div class="product__benefit-content">
-            <h4 class="product__benefit-title">{{ 'product-template.benefit_payment' | t }}</h4>
-            <p class="product__benefit-text">{{ 'product-template.benefit_text_payment' | t }}</p>
+            <h4 class="product__benefit-title">{{ section.settings.payment_title }}</h4>
+            <p class="product__benefit-text">{{ section.settings.payment_text }}</p>
           </div>
         </div>
       </div>
@@ -213,7 +263,7 @@
       <!-- Trust and reviews -->
       {% if section.settings.show_trust_badges %}
         <div class="product__trust">
-          <h4 class="product__trust-title">{{ 'product-template.trust_title' | t }}</h4>
+          <h4 class="product__trust-title">{{ section.settings.trust_badges_title }}</h4>
           <div class="product__trust-badges">
             {% for type in shop.enabled_payment_types %}
               <li class="footer__payment-item">
@@ -232,7 +282,7 @@
       <!-- Main description -->
       <div class="product__accordion is-active">
         <button class="product__accordion-header">
-          <span>{{ 'product-template.tab_description' | t }}</span>
+          <span>{{ section.settings.description_title }}</span>
           <span class="product__accordion-icon">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -250,7 +300,7 @@
       {% if section.settings.show_features_tab and section.settings.features_content != blank %}
         <div class="product__accordion">
           <button class="product__accordion-header">
-            <span>{{ 'product-template.tab_features' | t }}</span>
+            <span>{{ section.settings.features_title }}</span>
             <span class="product__accordion-icon">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -269,7 +319,7 @@
       {% if section.settings.show_shipping_tab and section.settings.shipping_content != blank %}
         <div class="product__accordion">
           <button class="product__accordion-header">
-            <span>{{ 'product-template.tab_shipping' | t }}</span>
+            <span>{{ section.settings.shipping_tab_title }}</span>
             <span class="product__accordion-icon">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -287,140 +337,27 @@
   </div>
 </div>
 
+<!-- Mobile Buy Bar -->
+{% if section.settings.show_mobile_buy_bar %}
+<div class="product__mobile-buy-bar">
+  <div class="product__mobile-price-container">
+    <span class="product__mobile-price">
+      {{ product.price | money_with_currency }}
+    </span>
+    {% if product.compare_at_price > product.price %}
+      <span class="product__mobile-compare">{{ product.compare_at_price | money_with_currency }}</span>
+    {% endif %}
+  </div>
+  <button class="product__mobile-buy-button" id="MobileBuyButton">
+    {{ 'product-template.add_to_cart' | t }}
+  </button>
+</div>
+{% endif %}
+
 <!-- Add variant data for JavaScript -->
 <script id="ProductJson" type="application/json">
   {{ product | json }}
 </script>
-
-<style>
-  /* Additional styles specific to dropshipping */
-  .product__promo {
-    margin-bottom: 20px;
-    background-color: rgba(240, 195, 98, 0.1);
-    padding: 16px;
-    border: 1px solid rgba(240, 195, 98, 0.2);
-  }
-  
-  .product__promo-badge {
-    display: inline-block;
-    background-color: #f0c362;
-    color: #0c0d13;
-    font-weight: 700;
-    font-size: 14px;
-    padding: 4px 12px;
-    margin-bottom: 12px;
-  }
-  
-  .product__timer {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  
-  .product__timer-item {
-    flex: 1;
-    background-color: rgba(15, 15, 20, 0.8);
-    padding: 8px 4px;
-    text-align: center;
-    border: 1px solid rgba(240, 195, 98, 0.3);
-  }
-  
-  .product__timer-value {
-    display: block;
-    font-size: 20px;
-    font-weight: 700;
-    color: #f0c362;
-    margin-bottom: 4px;
-  }
-  
-  .product__timer-label {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
-  }
-  
-  .product__benefits {
-    margin-top: 32px;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    border-top: 1px solid rgba(60, 60, 65, 0.8);
-    padding-top: 24px;
-  }
-  
-  .product__benefit-item {
-    display: flex;
-    gap: 16px;
-  }
-  
-  .product__benefit-icon {
-    flex-shrink: 0;
-    width: 24px;
-    color: #f0c362;
-  }
-  
-  .product__benefit-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: #f0c362;
-    margin: 0 0 4px 0;
-  }
-  
-  .product__benefit-text {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
-    margin: 0;
-  }
-  
-  .product__trust {
-    margin-top: 24px;
-    border-top: 1px solid rgba(60, 60, 65, 0.8);
-    padding-top: 20px;
-  }
-  
-  .product__trust-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    margin: 0 0 12px 0;
-    text-align: center;
-  }
-  
-  .product__trust-badges {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  
-  .product__trust-badge {
-    opacity: 0.8;
-    filter: grayscale(0.2);
-    transition: opacity 0.3s ease, filter 0.3s ease;
-  }
-  
-  .product__trust-badge:hover {
-    opacity: 1;
-    filter: grayscale(0);
-  }
-  
-  .product__price-saving {
-    background-color: #f0c362;
-    color: #0c0d13;
-    font-size: 14px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 2px;
-  }
-  
-
-  @media (prefers-reduced-motion: reduce) {
-    .product-animate {
-      transition: none;
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-</style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -454,24 +391,85 @@
       });
     }
     
-    // Product thumbnail management
+    // Product thumbnail and gallery handling
     const thumbnails = document.querySelectorAll('.product__thumbnail');
+    const mainImage = document.getElementById('ProductMainImage');
+    const prevButton = document.querySelector('.product__image-prev');
+    const nextButton = document.querySelector('.product__image-next');
+    const currentIndicator = document.querySelector('.product__thumbnails-indicator .current');
+    let currentIndex = 0;
+    
+    // Function to update main image
+    function updateMainImage(index) {
+      if (!thumbnails[index]) return;
+      
+      currentIndex = index;
+      
+      // Update main image
+      const thumbnail = thumbnails[index];
+      const fullImageUrl = thumbnail.querySelector('.product__thumbnail-image').getAttribute('data-full-image');
+      const zoomImageUrl = thumbnail.querySelector('.product__thumbnail-image').getAttribute('data-zoom-image');
+      
+      mainImage.src = fullImageUrl;
+      mainImage.setAttribute('data-zoom-image', zoomImageUrl);
+      mainImage.setAttribute('data-index', index);
+      
+      // Update active class
+      thumbnails.forEach(thumb => thumb.classList.remove('is-active'));
+      thumbnail.classList.add('is-active');
+      
+      // Update indicator
+      if (currentIndicator) {
+        currentIndicator.textContent = index + 1;
+      }
+    }
+    
+    // Set up thumbnail click events
     if (thumbnails.length > 0) {
-      thumbnails.forEach(thumbnail => {
+      thumbnails.forEach((thumbnail, index) => {
         thumbnail.addEventListener('click', function() {
-          // Update main image
-          const mainImage = document.getElementById('ProductMainImage');
-          const fullImageUrl = this.querySelector('.product__thumbnail-image').getAttribute('data-full-image');
-          const zoomImageUrl = this.querySelector('.product__thumbnail-image').getAttribute('data-zoom-image');
-          
-          mainImage.src = fullImageUrl;
-          mainImage.setAttribute('data-zoom-image', zoomImageUrl);
-          
-          // Update active class
-          thumbnails.forEach(thumb => thumb.classList.remove('is-active'));
-          this.classList.add('is-active');
+          updateMainImage(index);
         });
       });
+    }
+    
+    // Set up navigation buttons
+    if (prevButton && thumbnails.length > 1) {
+      prevButton.addEventListener('click', function() {
+        const newIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+        updateMainImage(newIndex);
+      });
+    }
+    
+    if (nextButton && thumbnails.length > 1) {
+      nextButton.addEventListener('click', function() {
+        const newIndex = (currentIndex + 1) % thumbnails.length;
+        updateMainImage(newIndex);
+      });
+    }
+    
+    // Mobile swipe for gallery
+    if (mainImage && thumbnails.length > 1) {
+      let startX;
+      
+      mainImage.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+      }, {passive: true});
+      
+      mainImage.addEventListener('touchend', function(e) {
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > 50) { // Minimum swipe distance
+          if (diff > 0) {
+            // Swipe left - next image
+            nextButton.click();
+          } else {
+            // Swipe right - previous image
+            prevButton.click();
+          }
+        }
+      }, {passive: true});
     }
     
     // Quantity buttons management
@@ -489,6 +487,25 @@
             input.value = currentValue + 1;
           }
         });
+      });
+    }
+    
+    // Mobile buy button
+    const mobileBuyButton = document.getElementById('MobileBuyButton');
+    const addToCartButton = document.getElementById('AddToCart');
+    
+    if (mobileBuyButton && addToCartButton) {
+      mobileBuyButton.addEventListener('click', function() {
+        // Scroll to form if not visible
+        const form = document.getElementById('AddToCartForm');
+        if (form) {
+          form.scrollIntoView({behavior: 'smooth'});
+        }
+        
+        // Trigger add to cart
+        setTimeout(() => {
+          addToCartButton.click();
+        }, 300);
       });
     }
     
@@ -512,10 +529,11 @@
       });
     }
     
-    // Countdown timer (for limited offer)
-    const timer = document.querySelector('.product__timer');
-    if (timer) {
-      const endTimeStr = timer.getAttribute('data-end-time');
+    // Enhanced countdown timer with animation
+    function updateTimer(timerElement) {
+      if (!timerElement) return;
+      
+      const endTimeStr = timerElement.getAttribute('data-end-time');
       const endTime = new Date(endTimeStr).getTime();
       
       // Update timer every second
@@ -529,18 +547,65 @@
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
         
-        // Display values
-        timer.querySelector('[data-days]').textContent = days.toString().padStart(2, '0');
-        timer.querySelector('[data-hours]').textContent = hours.toString().padStart(2, '0');
-        timer.querySelector('[data-minutes]').textContent = minutes.toString().padStart(2, '0');
-        timer.querySelector('[data-seconds]').textContent = seconds.toString().padStart(2, '0');
+        // Update days element if it exists
+        const daysElement = timerElement.querySelector('[data-days]');
+        if (daysElement) {
+          daysElement.textContent = days.toString().padStart(2, '0');
+        }
+        
+        // Update hours element
+        const hoursElement = timerElement.querySelector('[data-hours]');
+        if (hoursElement) {
+          hoursElement.textContent = hours.toString().padStart(2, '0');
+        }
+        
+        // Update minutes element
+        const minutesElement = timerElement.querySelector('[data-minutes]');
+        if (minutesElement) {
+          minutesElement.textContent = minutes.toString().padStart(2, '0');
+        }
+        
+        // Update seconds element
+        const secondsElement = timerElement.querySelector('[data-seconds]');
+        if (secondsElement) {
+          secondsElement.textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // Update countdown element (for floating discount)
+        const countdownElement = timerElement.querySelector('[data-countdown]');
+        if (countdownElement) {
+          countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Pulse animation on seconds change
+        if (secondsElement) {
+          secondsElement.classList.add('pulse');
+          setTimeout(() => {
+            secondsElement.classList.remove('pulse');
+          }, 500);
+        }
         
         // If the countdown is finished
         if (distance < 0) {
           clearInterval(interval);
-          timer.innerHTML = "<p>Offer ended!</p>";
+          if (countdownElement) {
+            countdownElement.textContent = "00:00:00";
+          } else {
+            timerElement.innerHTML = "<p>{{ section.settings.offer_ended_text }}</p>";
+          }
         }
       }, 1000);
+    }
+    
+    // Update all timers
+    const mainTimer = document.querySelector('.product__timer');
+    if (mainTimer) {
+      updateTimer(mainTimer);
+    }
+    
+    const discountTimer = document.querySelector('.product__discount-timer');
+    if (discountTimer) {
+      updateTimer(discountTimer);
     }
     
     // =====================================
@@ -557,11 +622,13 @@
       const priceElement = document.getElementById('ProductPrice');
       const compareElement = document.getElementById('ComparePrice');
       const priceContainer = document.querySelector('.product__price-container');
+      const mobilePriceElement = document.querySelector('.product__mobile-price');
+      const mobileCompareElement = document.querySelector('.product__mobile-compare');
       
       // Get variant selectors
       const variantSelectors = document.querySelectorAll('.product__select');
       
-      // Get variant ID input (CORRECTION AJOUTÉE)
+      // Get variant ID input
       const variantIdInput = document.getElementById('VariantId');
       
       // Function to format money consistently with Shopify
@@ -575,7 +642,7 @@
           return;
         }
         
-        // Update the variant ID input value (CORRECTION AJOUTÉE)
+        // Update the variant ID input value
         if (variantIdInput) {
           variantIdInput.value = variant.id;
         }
@@ -585,11 +652,21 @@
           priceElement.innerHTML = formatMoney(variant.price) + ' ' + window.Shopify.currency.active;
         }
         
+        // Update mobile price
+        if (mobilePriceElement) {
+          mobilePriceElement.innerHTML = formatMoney(variant.price) + ' ' + window.Shopify.currency.active;
+        }
+        
         // Update any comparison price and savings badge
         if (variant.compare_at_price && variant.compare_at_price > variant.price) {
           if (compareElement) {
             compareElement.innerHTML = formatMoney(variant.compare_at_price) + ' ' + window.Shopify.currency.active;
             compareElement.style.display = 'inline-block';
+          }
+          
+          if (mobileCompareElement) {
+            mobileCompareElement.innerHTML = formatMoney(variant.compare_at_price) + ' ' + window.Shopify.currency.active;
+            mobileCompareElement.style.display = 'inline-block';
           }
           
           // Calculate and update discount percentage
@@ -607,9 +684,25 @@
             priceContainer.appendChild(newSavingElement);
           }
           
+          // Update floating discount badge
+          const discountBadge = document.querySelector('.product__discount-badge');
+          if (discountBadge) {
+            discountBadge.textContent = '-' + discountPercentage + '%';
+          }
+          
+          // Show floating discount
+          const floatingDiscount = document.querySelector('.product__floating-discount');
+          if (floatingDiscount) {
+            floatingDiscount.classList.add('active');
+          }
+          
           // Add sale class to price
           if (priceElement) {
             priceElement.classList.add('product__price--sale');
+          }
+          
+          if (mobilePriceElement) {
+            mobilePriceElement.classList.add('product__price--sale');
           }
         } else {
           // No compare price, hide elements
@@ -617,29 +710,55 @@
             compareElement.style.display = 'none';
           }
           
+          if (mobileCompareElement) {
+            mobileCompareElement.style.display = 'none';
+          }
+          
           const savingElement = priceContainer.querySelector('.product__price-saving');
           if (savingElement) {
             savingElement.style.display = 'none';
+          }
+          
+          // Hide floating discount
+          const floatingDiscount = document.querySelector('.product__floating-discount');
+          if (floatingDiscount) {
+            floatingDiscount.classList.remove('active');
           }
           
           // Remove sale class from price
           if (priceElement) {
             priceElement.classList.remove('product__price--sale');
           }
+          
+          if (mobilePriceElement) {
+            mobilePriceElement.classList.remove('product__price--sale');
+          }
         }
         
         // Update add to cart button state
         const addToCartButton = document.getElementById('AddToCart');
         const addToCartText = document.getElementById('AddToCartText');
+        const mobileBuyButton = document.getElementById('MobileBuyButton');
         
         if (variant.available) {
           addToCartButton.classList.remove('disabled');
           addToCartButton.disabled = false;
-          addToCartText.innerHTML = window.theme && window.theme.strings && window.theme.strings.addToCart || 'Add to cart';
+          addToCartText.innerHTML = '{{ section.settings.add_to_cart_text }}';
+          
+          if (mobileBuyButton) {
+            mobileBuyButton.disabled = false;
+            mobileBuyButton.classList.remove('disabled');
+          }
         } else {
           addToCartButton.classList.add('disabled');
           addToCartButton.disabled = true;
-          addToCartText.innerHTML = window.theme && window.theme.strings && window.theme.strings.soldOut || 'Sold out';
+          addToCartText.innerHTML = '{{ section.settings.sold_out_text }}';
+          
+          if (mobileBuyButton) {
+            mobileBuyButton.disabled = true;
+            mobileBuyButton.classList.add('disabled');
+            mobileBuyButton.textContent = '{{ section.settings.sold_out_text }}';
+          }
         }
       }
       
@@ -686,7 +805,8 @@
               const thumbnail = document.querySelector(`.product__thumbnail[data-media-id="${imageId}"]`);
               
               if (thumbnail) {
-                thumbnail.click();
+                const index = parseInt(thumbnail.getAttribute('data-index'));
+                updateMainImage(index);
               }
             }
           });
@@ -742,7 +862,7 @@
       "type": "checkbox",
       "id": "show_promo_timer",
       "label": "Show limited time offer timer",
-      "default": false
+      "default": true
     },
     {
       "type": "text",
@@ -758,8 +878,63 @@
       "info": "Format: YYYY-MM-DD"
     },
     {
+      "type": "text",
+      "id": "offer_ended_text",
+      "label": "Offer ended text",
+      "default": "Offer ended!"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_floating_discount",
+      "label": "Show floating discount badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "ends_in_text",
+      "label": "Ends in text",
+      "default": "Offer ends in:"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stock_indicator",
+      "label": "Show stock indicator",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "stock_level_percentage",
+      "min": 10,
+      "max": 90,
+      "step": 5,
+      "label": "Stock level percentage",
+      "default": 75
+    },
+    {
+      "type": "text",
+      "id": "stock_message",
+      "label": "Stock message",
+      "default": "Only a few items left in stock!"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_buy_bar",
+      "label": "Show sticky buy bar on mobile",
+      "default": true
+    },
+    {
       "type": "header",
       "content": "Product benefits"
+    },
+    {
+      "type": "text",
+      "id": "shipping_title",
+      "label": "Shipping benefit title",
+      "default": "Fast Shipping"
     },
     {
       "type": "text",
@@ -769,9 +944,21 @@
     },
     {
       "type": "text",
+      "id": "guarantee_title",
+      "label": "Guarantee benefit title",
+      "default": "Money-Back Guarantee"
+    },
+    {
+      "type": "text",
       "id": "guarantee_text",
       "label": "Guarantee text",
       "default": "Refund within 30 days"
+    },
+    {
+      "type": "text",
+      "id": "payment_title",
+      "label": "Payment benefit title",
+      "default": "Secure Payment"
     },
     {
       "type": "text",
@@ -784,6 +971,12 @@
       "id": "show_trust_badges",
       "label": "Show trust badges",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "trust_badges_title",
+      "label": "Trust badges title",
+      "default": "Trusted Payment Methods"
     },
     {
       "type": "header",
@@ -821,8 +1014,8 @@
     },
     {
       "type": "text",
-      "id": "shipping_title",
-      "label": "Shipping title",
+      "id": "shipping_tab_title",
+      "label": "Shipping tab title",
       "default": "Shipping & Returns"
     },
     {
@@ -830,6 +1023,34 @@
       "id": "shipping_content",
       "label": "Shipping content",
       "default": "<p><strong>Delivery time:</strong> 10-15 business days</p><p><strong>Shipping costs:</strong> Free worldwide</p><p><strong>Return policy:</strong> Returns accepted within 30 days, guaranteed refund.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Image Gallery"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": "Enable image zoom on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_navigation",
+      "label": "Show image navigation controls",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "previous_image_text",
+      "label": "Previous image text",
+      "default": "Previous"
+    },
+    {
+      "type": "text",
+      "id": "next_image_text",
+      "label": "Next image text",
+      "default": "Next"
     }
   ],
   "presets": [
