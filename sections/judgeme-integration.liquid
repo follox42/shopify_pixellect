@@ -1,5 +1,5 @@
 {% comment %}
-  judgeme-integration.liquid - Section pour l'intégration simple de JudgeMe avec CSS personnalisé
+  judgeme-integration.liquid - Simple JudgeMe integration section with English text
 {% endcomment %}
 
 {{ 'judgeme-pixellect.css' | asset_url | stylesheet_tag }}
@@ -29,7 +29,7 @@
       </div>
     {% endif %}
     
-    <!-- Code JudgeMe standard -->
+    <!-- Standard JudgeMe code -->
     <div id="judgeme_product_reviews" class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}">
       {{ product.metafields.judgeme.widget }}
     </div>
@@ -53,81 +53,81 @@
 
 {% schema %}
 {
-  "name": "Avis JudgeMe Simple",
+  "name": "JudgeMe Reviews",
   "settings": [
     {
       "type": "header",
-      "content": "En-tête"
+      "content": "Header"
     },
     {
       "type": "checkbox",
       "id": "show_title",
-      "label": "Afficher le titre",
+      "label": "Show title",
       "default": true
     },
     {
       "type": "text",
       "id": "title_text",
-      "label": "Texte du titre",
-      "default": "Avis Clients"
+      "label": "Title text",
+      "default": "Customer Reviews"
     },
     {
       "type": "checkbox",
       "id": "show_subtitle",
-      "label": "Afficher le sous-titre",
+      "label": "Show subtitle",
       "default": false
     },
     {
       "type": "text",
       "id": "subtitle_text",
-      "label": "Texte du sous-titre",
-      "default": "Découvrez ce que nos clients pensent de nos produits"
+      "label": "Subtitle text",
+      "default": "Discover what our customers think about our products"
     },
     {
       "type": "header",
-      "content": "Informations supplémentaires"
+      "content": "Additional Information"
     },
     {
       "type": "checkbox",
       "id": "show_shipping_info",
-      "label": "Afficher les informations de livraison",
+      "label": "Show shipping information",
       "default": true
     },
     {
       "type": "text",
       "id": "shipping_title",
-      "label": "Titre de livraison",
-      "default": "Délai de livraison:"
+      "label": "Shipping title",
+      "default": "Shipping Time:"
     },
     {
       "type": "text",
       "id": "shipping_text",
-      "label": "Texte de livraison",
-      "default": "10-20 jours ouvrables pour la livraison internationale. Nous expédions depuis nos entrepôts internationaux pour vous garantir les meilleurs prix."
+      "label": "Shipping text",
+      "default": "10-20 business days for international delivery. We ship from our international warehouses to guarantee the best prices."
     },
     {
       "type": "checkbox",
       "id": "show_guarantee",
-      "label": "Afficher la garantie",
+      "label": "Show guarantee",
       "default": true
     },
     {
       "type": "text",
       "id": "guarantee_title",
-      "label": "Titre de la garantie",
-      "default": "Garantie satisfaction:"
+      "label": "Guarantee title",
+      "default": "Satisfaction Guarantee:"
     },
     {
       "type": "text",
       "id": "guarantee_text",
-      "label": "Texte de la garantie",
-      "default": "Nous offrons un remboursement complet si vous n'êtes pas satisfait de votre achat. Votre satisfaction est notre priorité absolue!"
+      "label": "Guarantee text",
+      "default": "We offer a full refund if you're not satisfied with your purchase. Your satisfaction is our top priority!"
     }
   ],
   "presets": [
     {
-      "name": "Avis JudgeMe Simple",
-      "category": "Produit"
+      "name": "JudgeMe Reviews",
+      "category": "Product"
     }
   ]
 }
