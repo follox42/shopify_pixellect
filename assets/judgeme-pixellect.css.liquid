@@ -1,0 +1,575 @@
+/* judgeme-pixellect.css - Style personnalisé pour JudgeMe avec thème PIXELLECT */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+/* ===== CONTENEUR PRINCIPAL ===== */
+.judgeme-reviews {
+  font-family: 'Montserrat', sans-serif;
+  width: 100%;
+  padding: 60px 0;
+  margin-top: 40px;
+  position: relative;
+  color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(20, 20, 25, 0.5);
+}
+
+.judgeme-reviews::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(240, 195, 98, 0.2), transparent);
+}
+
+.judgeme-reviews__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== EN-TÊTE DE SECTION ===== */
+.judgeme-reviews__header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.judgeme-reviews__title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #f0c362;
+  margin: 0 0 16px;
+  position: relative;
+  display: inline-block;
+}
+
+.judgeme-reviews__title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(240, 195, 98, 0.4), rgba(240, 195, 98, 0.8), rgba(240, 195, 98, 0.4));
+  border-radius: 2px;
+}
+
+.judgeme-reviews__subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== CONTENU DES AVIS ===== */
+.judgeme-reviews__content {
+  position: relative;
+}
+
+.judgeme-reviews__summary-wrapper {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* ===== AVIS EN VEDETTE ===== */
+.judgeme-reviews__featured {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.judgeme-reviews__featured-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #f0c362;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* ===== APPEL À L'ACTION ===== */
+.judgeme-reviews__cta {
+  margin-top: 40px;
+  text-align: center;
+  padding: 30px;
+  background-color: rgba(30, 30, 35, 0.4);
+  border-radius: 8px;
+  border: 1px solid rgba(240, 195, 98, 0.1);
+}
+
+.judgeme-reviews__cta-text {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 20px;
+}
+
+.judgeme-reviews__cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background-color: rgba(240, 195, 98, 0.2);
+  color: #f0c362 !important;
+  border: 1px solid rgba(240, 195, 98, 0.3);
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none !important;
+}
+
+.judgeme-reviews__cta-button:hover {
+  background-color: rgba(240, 195, 98, 0.3);
+  transform: translateY(-2px);
+}
+
+.judgeme-reviews__cta-icon {
+  transition: transform 0.3s ease;
+}
+
+.judgeme-reviews__cta-button:hover .judgeme-reviews__cta-icon {
+  transform: translateX(4px);
+}
+
+/* ===== SECTION DE CONFIANCE ===== */
+.judgeme-reviews__trust {
+  margin-top: 60px;
+}
+
+.judgeme-reviews__trust-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.judgeme-reviews__trust-item {
+  text-align: center;
+  padding: 24px;
+  background-color: rgba(30, 30, 35, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.judgeme-reviews__trust-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.judgeme-reviews__trust-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  opacity: 0.9;
+}
+
+.judgeme-reviews__trust-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f0c362;
+  margin: 0 0 10px;
+}
+
+.judgeme-reviews__trust-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===== PERSONNALISATION DE JUDGEME ===== */
+
+/* Personnalisation de l'avatar avec initiales */
+.judgeme-reviews__pixel-avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f0c362;
+  font-weight: 600;
+  font-size: 14px;
+  background-color: rgba(240, 195, 98, 0.1);
+  border: 1px solid rgba(240, 195, 98, 0.2);
+}
+
+/* Sélecteurs pour personnaliser les éléments JudgeMe */
+.pixellect-judgeme-theme .jdgm-rev-widg {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev-widg__header {
+  margin-bottom: 30px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding-bottom: 20px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev__header {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 10px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev {
+  margin-bottom: 24px !important;
+  padding: 20px !important;
+  background-color: rgba(30, 30, 35, 0.3) !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev__icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  margin-right: 15px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev__author {
+  font-weight: 600 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 16px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev__timestamp {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 14px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev__rating {
+  margin: 5px 0 !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev__body {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  margin-top: 10px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev__title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #f0c362 !important;
+  margin-bottom: 8px !important;
+}
+
+/* Étoiles */
+.pixellect-judgeme-theme .jdgm-star {
+  color: rgba(255, 255, 255, 0.2) !important;
+  font-size: 18px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-star.jdgm--on,
+.pixellect-judgeme-theme .jdgm-star.jdgm--half {
+  color: #f0c362 !important;
+}
+
+/* Icônes vérifiées */
+.pixellect-judgeme-theme .jdgm-rev__verified {
+  display: flex !important;
+  align-items: center !important;
+  font-size: 13px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  margin-left: 10px !important;
+}
+
+.pixellect-judgeme-theme .judgeme-reviews__verified-icon {
+  margin-right: 5px !important;
+  color: #f0c362 !important;
+}
+
+/* Photos des avis */
+.pixellect-judgeme-theme .jdgm-rev__pics {
+  margin-top: 15px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev__pic-link {
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-rev__pic {
+  border-radius: 4px !important;
+  border: 1px solid rgba(240, 195, 98, 0.2) !important;
+  overflow: hidden !important;
+}
+
+/* Pagination */
+.pixellect-judgeme-theme .jdgm-paginate {
+  margin-top: 30px !important;
+  text-align: center !important;
+}
+
+.pixellect-judgeme-theme .jdgm-paginate__page {
+  margin: 0 5px !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 4px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 14px !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.pixellect-judgeme-theme .jdgm-paginate__page:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.pixellect-judgeme-theme .jdgm-paginate__page.jdgm-paginate__page--current {
+  background-color: rgba(240, 195, 98, 0.2) !important;
+  color: #f0c362 !important;
+  border: 1px solid rgba(240, 195, 98, 0.3) !important;
+}
+
+/* Formulaire d'avis */
+.pixellect-judgeme-theme .jdgm-write-rev-link {
+  background-color: rgba(240, 195, 98, 0.2) !important;
+  color: #f0c362 !important;
+  border: 1px solid rgba(240, 195, 98, 0.3) !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+}
+
+.pixellect-judgeme-theme .jdgm-write-rev-link:hover {
+  background-color: rgba(240, 195, 98, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Formulaire modal */
+.pixellect-judgeme-theme .jdgm-form-wrapper {
+  background-color: #14151a !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(240, 195, 98, 0.1) !important;
+}
+
+.pixellect-judgeme-theme .jdgm-form__title {
+  color: #f0c362 !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+}
+
+.pixellect-judgeme-theme .jdgm-form__field {
+  margin-bottom: 20px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-form__field-label {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin-bottom: 8px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-form__input {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 4px !important;
+  color: #fff !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.pixellect-judgeme-theme .jdgm-form__input:focus {
+  outline: none !important;
+  border-color: rgba(240, 195, 98, 0.4) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.pixellect-judgeme-theme .jdgm-form__textarea {
+  min-height: 120px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-form__submit-btn {
+  background-color: rgba(240, 195, 98, 0.8) !important;
+  color: #0c0d13 !important;
+  border: none !important;
+  border-radius: 4px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  transition: all 0.3s ease !important;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.pixellect-judgeme-theme .jdgm-form__submit-btn:hover {
+  background-color: #f0c362 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Carrousel d'avis */
+.pixellect-judgeme-theme .jdgm-carousel-wrapper {
+  margin-top: 30px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-carousel__item-wrapper {
+  margin: 10px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-carousel__item {
+  height: 100% !important;
+  padding: 20px !important;
+  background-color: rgba(30, 30, 35, 0.3) !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  margin: 0 !important;
+}
+
+.pixellect-judgeme-theme .jdgm-carousel__item-head {
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 15px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-carousel__item-content {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Widget flèches de navigation */
+.pixellect-judgeme-theme .jdgm-prev-badge__stars {
+  color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.pixellect-judgeme-theme .jdgm-prev-badge__stars .jdgm-star.jdgm--on,
+.pixellect-judgeme-theme .jdgm-prev-badge__stars .jdgm-star.jdgm--half {
+  color: #f0c362 !important;
+}
+
+.pixellect-judgeme-theme .jdgm-prev-badge__text {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 14px !important;
+}
+
+.pixellect-judgeme-theme .jdgm-carousel__left-arrow,
+.pixellect-judgeme-theme .jdgm-carousel__right-arrow {
+  background-color: rgba(240, 195, 98, 0.2) !important;
+  color: #f0c362 !important;
+  border: 1px solid rgba(240, 195, 98, 0.3) !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  transition: all 0.3s ease !important;
+}
+
+.pixellect-judgeme-theme .jdgm-carousel__left-arrow:hover,
+.pixellect-judgeme-theme .jdgm-carousel__right-arrow:hover {
+  background-color: rgba(240, 195, 98, 0.3) !important;
+}
+
+/* Widget de résumé */
+.pixellect-judgeme-theme .jdgm-widget .jdgm-stars {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.pixellect-judgeme-theme .jdgm-subtab {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 8px 16px !important;
+  margin: 0 5px 10px !important;
+  transition: all 0.3s ease !important;
+}
+
+.pixellect-judgeme-theme .jdgm-subtab:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.pixellect-judgeme-theme .jdgm-subtab.jdgm--active {
+  background-color: rgba(240, 195, 98, 0.2) !important;
+  color: #f0c362 !important;
+  border: 1px solid rgba(240, 195, 98, 0.3) !important;
+}
+
+/* Widget header */
+.judgeme-reviews__widget-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.judgeme-reviews__score-container {
+  margin-right: 20px;
+}
+
+.judgeme-reviews__filter-container {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.judgeme-reviews__sort-container {
+  margin-left: 20px;
+}
+
+/* Responsive */
+@media screen and (max-width: 767px) {
+  .judgeme-reviews {
+    padding: 40px 0;
+  }
+  
+  .judgeme-reviews__title {
+    font-size: 24px;
+  }
+  
+  .judgeme-reviews__trust-items {
+    grid-template-columns: 1fr;
+  }
+  
+  .judgeme-reviews__widget-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .judgeme-reviews__score-container,
+  .judgeme-reviews__filter-container,
+  .judgeme-reviews__sort-container {
+    margin: 10px 0;
+    width: 100%;
+  }
+  
+  .pixellect-judgeme-theme .jdgm-rev {
+    padding: 15px !important;
+  }
+  
+  .pixellect-judgeme-theme .jdgm-rev__header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  
+  .pixellect-judgeme-theme .jdgm-rev__icon {
+    margin-bottom: 10px !important;
+  }
+  
+  .pixellect-judgeme-theme .jdgm-form__title {
+    font-size: 20px !important;
+  }
+}
