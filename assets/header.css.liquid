@@ -44,6 +44,7 @@
 .header_logo-text {
   color: #fff;
   font-size: 2em;
+  margin-right: 10px;
   font-weight: 900;
   text-transform: uppercase;
   background: #ffffff;
@@ -141,90 +142,6 @@
   justify-content: center;
 }
 
-/*_________Mobile Menu_________*/
-.header_mobile-toggle {
-  display: none;
-  background: none;
-  border: none;
-  padding: 0;
-  width: 30px;
-  height: 24px;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-}
-
-.header_mobile-bar {
-  width: 100%;
-  height: 2px;
-  background-color: rgba(255, 255, 255, 0.85);
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.header_mobile-toggle[aria-expanded="true"] .header_mobile-bar:nth-child(1) {
-  transform: translateY(11px) rotate(45deg);
-}
-
-.header_mobile-toggle[aria-expanded="true"] .header_mobile-bar:nth-child(2) {
-  opacity: 0;
-}
-
-.header_mobile-toggle[aria-expanded="true"] .header_mobile-bar:nth-child(3) {
-  transform: translateY(-11px) rotate(-45deg);
-}
-
-.header_mobile-menu {
-  display: none;
-  background-color: #0c0d13;
-  padding: 20px 0;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  z-index: 99;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  transform: translateY(-10px);
-  opacity: 0;
-  visibility: hidden;
-  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.header_mobile-menu.is-active {
-  transform: translateY(0);
-  opacity: 1;
-  visibility: visible;
-}
-
-.header_mobile-menu-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.header_mobile-menu-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.header_mobile-menu-item {
-  margin-bottom: 10px;
-}
-
-.header_mobile-menu-link {
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  font-size: 18px;
-  font-weight: 500;
-  display: block;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.header_mobile-menu-link:hover,
-.header_mobile-menu-link--active {
-  color: #fff;
-}
 
 @media screen and (max-width: 991px) {
   .header_menu {
