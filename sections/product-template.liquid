@@ -1,7 +1,8 @@
 {% comment %}
-  product.liquid - Enhanced for dropshipping with improved discounts & mobile responsiveness
+  product-template.liquid - Enhanced for dropshipping with improved trust elements
 {% endcomment %}
 {{ 'product.css' | asset_url | stylesheet_tag }}
+{{ 'product-trust.css' | asset_url | stylesheet_tag }}
 
 <script>
   // Add js-enabled class to html element to enable animations only when JS works
@@ -25,9 +26,9 @@
     <span class="product__discount-badge">-{{ discount_percentage }}%</span>
     {% if section.settings.show_promo_timer %}
       <div class="product__discount-timer" data-end-time="{{ section.settings.promo_end_time }}">
-        <span class="product__discount-timer-text">{{ section.settings.ends_in_text }}</span>
+        <span class="product__discount-timer-text">{{ section.settings.ends_in_text | default: 'Offer ends in:' }}</span>
         <div class="product__discount-countdown">
-          <span data-hours>00</span>:<span data-minutes>00</span>:<span data-seconds>00</span>
+          <span data-hours>24</span>:<span data-minutes>00</span>:<span data-seconds>00</span>
         </div>
       </div>
     {% endif %}
@@ -50,7 +51,7 @@
           
           {% if product.media.size > 1 %}
             <div class="product__image-controls">
-              <button class="product__image-control product__image-prev" aria-label="{{ 'product-template.previous_image' | t }}">
+              <button class="product__image-control product__image-prev" aria-label="Previous image">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -63,7 +64,7 @@
                   <path d="M3 21L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
-              <button class="product__image-control product__image-next" aria-label="{{ 'product-template.next_image' | t }}">
+              <button class="product__image-control product__image-next" aria-label="Next image">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -102,6 +103,13 @@
     <div class="product__details product-animate" data-delay="100">
       <h1 class="product__title">{{ product.title }}</h1>
       
+      <!-- JudgeMe Stars -->
+      <div class="product__reviews-badge">
+        <div class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}">
+          {{ product.metafields.judgeme.badge }}
+        </div>
+      </div>
+      
       <div class="product__price-container">
         <span class="product__price {% if product.compare_at_price > product.price %}product__price--sale{% endif %}" id="ProductPrice">
           {{ product.price | money_with_currency }}
@@ -115,6 +123,50 @@
           {% assign discount_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
           <span class="product__price-saving">-{{ discount_percentage }}%</span>
         {% endif %}
+      </div>
+
+      <!-- Trust Badges Above Form -->
+      <div class="product__trust-badges">
+        <div class="product__trust-badge">
+          <div class="product__trust-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 22H19C20.1046 22 21 21.1046 21 20V8H3V20C3 21.1046 3.89543 22 5 22Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 2H8L3 8" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 8L16 2" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 14H15" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="product__trust-text">Free Shipping</div>
+        </div>
+        
+        <div class="product__trust-badge">
+          <div class="product__trust-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 6V12L16 14" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="product__trust-text">10-15 Day Delivery</div>
+        </div>
+        
+        <div class="product__trust-badge">
+          <div class="product__trust-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="product__trust-text">30-Day Money Back</div>
+        </div>
+        
+        <div class="product__trust-badge">
+          <div class="product__trust-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16.2399 7.76001L14.1199 14.12L7.75989 16.24L9.87989 9.88001L16.2399 7.76001Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="product__trust-text">Worldwide Shipping</div>
+        </div>
       </div>
 
       <!-- Purchase Form -->
@@ -151,7 +203,7 @@
         
         <div class="product__quantity">
           <label for="Quantity" class="product__quantity-label">
-            {{ 'product-template.quantity_label' | t }}
+            Quantity
           </label>
           <div class="product__quantity-wrapper">
             <button type="button" class="product__quantity-button product__quantity-decrease" data-action="decrease"></button>
@@ -170,30 +222,30 @@
         <!-- Promo and timer -->
         {% if section.settings.show_promo_timer %}
           <div class="product__promo">
-            <div class="product__promo-badge">{{ 'product-template.promo_badge' | t }}</div>
+            <div class="product__promo-badge">{{ section.settings.promo_badge_text | default: 'LIMITED OFFER' }}</div>
             <div class="product__timer" data-end-time="{{ section.settings.promo_end_time }}">
               <div class="product__timer-item">
                 <span class="product__timer-value" data-days>00</span>
-                <span class="product__timer-label">{{ 'product-template.timer_days' | t }}</span>
+                <span class="product__timer-label">Days</span>
               </div>
               <div class="product__timer-item">
-                <span class="product__timer-value" data-hours>00</span>
-                <span class="product__timer-label">{{ 'product-template.timer_hours' | t }}</span>
+                <span class="product__timer-value" data-hours>24</span>
+                <span class="product__timer-label">Hours</span>
               </div>
               <div class="product__timer-item">
                 <span class="product__timer-value" data-minutes>00</span>
-                <span class="product__timer-label">{{ 'product-template.timer_minutes' | t }}</span>
+                <span class="product__timer-label">Minutes</span>
               </div>
               <div class="product__timer-item">
                 <span class="product__timer-value" data-seconds>00</span>
-                <span class="product__timer-label">{{ 'product-template.timer_seconds' | t }}</span>
+                <span class="product__timer-label">Seconds</span>
               </div>
             </div>
             <div class="product__stock-indicator">
               <div class="product__stock-bar">
                 <div class="product__stock-progress" style="width: {{ section.settings.stock_level_percentage }}%"></div>
               </div>
-              <div class="product__stock-text">{{ section.settings.stock_message }}</div>
+              <div class="product__stock-text">{{ section.settings.stock_message | default: 'Only a few items left in stock!' }}</div>
             </div>
           </div>
         {% endif %}
@@ -208,9 +260,9 @@
           >
             <span id="AddToCartText">
               {% if product.available %}
-                {{ 'product-template.add_to_cart' | t }}
+                {{ section.settings.add_to_cart_text | default: 'Add to cart' }}
               {% else %}
-                {{ 'product-template.sold_out' | t }}
+                {{ section.settings.sold_out_text | default: 'Sold out' }}
               {% endif %}
             </span>
           </button>
@@ -221,58 +273,159 @@
         </div>
       {% endform %}
       
-      <!-- Shipping Benefits -->
+      <!-- Shipping Benefits with Enhanced SVGs -->
       <div class="product__benefits">
         <div class="product__benefit-item">
           <div class="product__benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 12.5C5 11.4456 5.44772 10.5 6 10.5H18C18.5523 10.5 19 11.4456 19 12.5C19 13.5544 18.5523 14.5 18 14.5H6C5.44772 14.5 5 13.5544 5 12.5Z" stroke="#f0c362" stroke-width="1.5"/>
-              <rect x="7" y="4" width="10" height="16" rx="2" stroke="#f0c362" stroke-width="1.5"/>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 7H20M4 7V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V7M4 7L8 3H16L20 7" stroke="#f0c362" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 11C8 11 9 13 12 13C15 13 16 11 16 11" stroke="#f0c362" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
           <div class="product__benefit-content">
-            <h4 class="product__benefit-title">{{ section.settings.shipping_title }}</h4>
-            <p class="product__benefit-text">{{ section.settings.shipping_text }}</p>
+            <h4 class="product__benefit-title">Fast International Shipping</h4>
+            <p class="product__benefit-text">Tracked delivery within 10-15 business days to your doorstep.</p>
           </div>
         </div>
         <div class="product__benefit-item">
           <div class="product__benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#f0c362" stroke-width="1.5"/>
-              <path d="M12 7L12 12M12 12L15 15M12 12L9 15" stroke="#f0c362" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 14L12 22M12 22L15 19M12 22L9 19" stroke="#f0c362" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M20 9H4C4 11.5 5.5 14 12 14C18.5 14 20 11.5 20 9Z" stroke="#f0c362" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 2C7.5 2 4 5 4 9H20C20 5 16.5 2 12 2Z" stroke="#f0c362" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
           <div class="product__benefit-content">
-            <h4 class="product__benefit-title">{{ section.settings.guarantee_title }}</h4>
-            <p class="product__benefit-text">{{ section.settings.guarantee_text }}</p>
+            <h4 class="product__benefit-title">30-Day Money-Back Guarantee</h4>
+            <p class="product__benefit-text">Not satisfied? Get a full refund within 30 days, no questions asked.</p>
           </div>
         </div>
         <div class="product__benefit-item">
           <div class="product__benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#f0c362" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
           <div class="product__benefit-content">
-            <h4 class="product__benefit-title">{{ section.settings.payment_title }}</h4>
-            <p class="product__benefit-text">{{ section.settings.payment_text }}</p>
+            <h4 class="product__benefit-title">Secure Payment</h4>
+            <p class="product__benefit-text">100% secure transactions with SSL encryption and trusted payment methods.</p>
           </div>
         </div>
       </div>
       
-      <!-- Trust and reviews -->
-      {% if section.settings.show_trust_badges %}
-        <div class="product__trust">
-          <h4 class="product__trust-title">{{ section.settings.trust_badges_title }}</h4>
-          <div class="product__trust-badges">
-            {% for type in shop.enabled_payment_types %}
-              <li class="footer__payment-item">
-                {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
-              </li>
-            {% endfor %}
+      <!-- Enhanced Trust and Policy Links -->
+      <div class="product__trust">
+        <h4 class="product__trust-title">We Accept:</h4>
+        <div class="product__trust-badges">
+          <div class="product__payment-badge">
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="38" height="24" rx="3" fill="#1A1F71"/>
+              <path d="M15.4 15.8H13.2L14.6 8.2H16.8L15.4 15.8Z" fill="white"/>
+              <path d="M23.2 8.4C22.8 8.2 22.2 8 21.4 8C19.4 8 18 9 18 10.6C18 11.8 19 12.4 19.8 12.8C20.6 13.2 20.8 13.4 20.8 13.8C20.8 14.4 20.2 14.6 19.6 14.6C18.8 14.6 18.4 14.4 17.8 14.2L17.6 14.0L17.4 15.8C17.8 16 18.6 16.2 19.4 16.2C21.6 16.2 22.8 15.2 22.8 13.4C22.8 12.4 22.2 11.6 21 11.0C20.2 10.6 19.8 10.4 19.8 10.0C19.8 9.6 20.2 9.2 21.0 9.2C21.6 9.2 22.0 9.4 22.4 9.6L22.6 9.7L23.2 8.4Z" fill="white"/>
+              <path d="M26.6 8.2H25C24.6 8.2 24.2 8.4 24 8.8L21.2 15.8H23.4C23.4 15.8 23.8 14.6 23.8 14.4C24.0 14.4 25.8 14.4 26.2 14.4C26.2 14.6 26.4 15.8 26.4 15.8H28.4L26.6 8.2ZM24.4 12.8C24.6 12.2 25.2 10.6 25.2 10.6C25.2 10.6 25.4 10.2 25.4 9.8L25.6 10.6C25.6 10.6 26.0 12.2 26.0 12.8H24.4Z" fill="white"/>
+              <path d="M12.2 8.2L10.2 13.2L10 12.4C9.6 11.0 8.4 9.6 7 8.8L8.8 15.8H11L14.2 8.2H12.2Z" fill="white"/>
+              <path d="M8.6 8.2H5.2L5 8.4C7.4 9.0 9 10.6 9.6 12.4L8.8 8.8C8.8 8.4 8.6 8.2 8.6 8.2Z" fill="#F9A51A"/>
+            </svg>
+          </div>
+          <div class="product__payment-badge">
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="38" height="24" rx="3" fill="#2A2A2A"/>
+              <path d="M25.118 10.621H23V17.986H25.118V10.621Z" fill="#9AE2FF"/>
+              <path d="M23.3029 6.50071C22.561 6.50071 22.0552 7.00652 22.0552 7.67668C22.0552 8.34684 22.561 8.85266 23.3029 8.85266C24.0448 8.85266 24.5506 8.34684 24.5506 7.67668C24.5506 7.00652 24.0448 6.50071 23.3029 6.50071Z" fill="#9AE2FF"/>
+              <path d="M27.8995 10.621H26.2204V11.3598H26.1818C25.8302 10.8226 24.9999 10.4443 24.1695 10.4443C22.5676 10.4443 21.3477 11.7962 21.3477 14.0092C21.3477 16.1865 22.5289 17.5613 24.1695 17.5613C24.9999 17.5613 25.8302 17.1601 26.1818 16.6229V17.3616H27.8995V10.621ZM24.7526 15.9442C23.7168 15.9442 23.1337 15.0934 23.1337 14.0092C23.1337 12.925 23.7168 12.0742 24.7526 12.0742C25.7884 12.0742 26.3715 12.925 26.3715 14.0092C26.3715 15.0934 25.7884 15.9442 24.7526 15.9442Z" fill="#9AE2FF"/>
+              <path d="M29.1194 14.0092C29.1194 15.0934 29.7025 15.9442 30.7383 15.9442C31.5687 15.9442 32.0359 15.5459 32.3874 14.9296H34.0279C33.6377 16.3044 32.3874 17.5613 30.7383 17.5613C28.7441 17.5613 27.3334 16.1865 27.3334 14.0092C27.3334 11.8319 28.7441 10.4443 30.7383 10.4443C32.3874 10.4443 33.6377 11.7012 34.0279 13.076H32.3874C32.0359 12.4597 31.5687 12.0615 30.7383 12.0615C29.7025 12.0742 29.1194 12.925 29.1194 14.0092Z" fill="#9AE2FF"/>
+              <path d="M15.2238 6.5H10.3345V17.9859H15.2238C18.0811 17.9859 20 15.7244 20 12.2429C20 8.76144 18.0811 6.5 15.2238 6.5ZM15.1658 15.6301H13.2081V8.85556H15.1658C16.605 8.85556 17.3469 10.1817 17.3469 12.2429C17.3469 14.304 16.605 15.6301 15.1658 15.6301Z" fill="white"/>
+              <path d="M6.71773 6.5H3.86033V17.9859H6.71773V6.5Z" fill="white"/>
+              <path d="M9.75369 13.2971L11.6662 6.5H9.73989L7.09302 17.9859H9.01949L9.48724 16.0451C9.67587 15.3491 10.9151 10.797 10.9151 10.797C10.9151 10.797 9.85651 12.4654 9.75369 13.2971Z" fill="white"/>
+            </svg>
+          </div>
+          <div class="product__payment-badge">
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="38" height="24" rx="3" fill="#EEEEEE"/>
+              <path d="M25.0086 9.5045C24.0053 9.0017 22.7999 9 19 9C15.2001 9 13.9947 9.0017 12.9914 9.5045C11.7855 10.1038 11.1038 10.7855 10.5045 12.9914C10.0017 13.9947 10 15.2001 10 19C10 22.7999 10.0017 24.0053 10.5045 25.0086C11.1038 26.2145 11.7855 26.8962 12.9914 27.4955C13.9947 27.9983 15.2001 28 19 28C22.7999 28 24.0053 27.9983 25.0086 27.4955C26.2145 26.8962 26.8962 26.2145 27.4955 25.0086C27.9983 24.0053 28 22.7999 28 19C28 15.2001 27.9983 13.9947 27.4955 12.9914C26.8962 11.7855 26.2145 11.1038 25.0086 10.5045V9.5045Z" fill="url(#paint0_linear_302_153)"/>
+              <path d="M15.4142 16.9497C15.4142 16.2676 15.6953 15.6855 16.2578 15.1035C15.7539 14.6582 15.0918 14.3965 14.3711 14.3965C12.7832 14.3965 11.5 15.5527 11.5 17C11.5 18.4473 12.7832 19.6035 14.3711 19.6035C15.0918 19.6035 15.7539 19.3223 16.2578 18.8965C15.6953 18.3145 15.4142 17.7324 15.4142 17.0504V16.9497ZM16.6836 19.2832L16.5244 19.4425C15.8916 20.0264 15.058 20.3535 14.1895 20.3535C12.4053 20.3535 11 18.8965 11 17C11 15.1035 12.4053 13.6465 14.1895 13.6465C15.058 13.6465 15.8916 13.9736 16.5244 14.5576L16.6836 14.7168L16.0225 15.3779L15.8438 15.1992C15.4375 14.783 14.8164 14.5674 14.1895 14.5674C12.9336 14.5674 11.9316 15.6836 11.9316 17C11.9316 18.3164 12.9336 19.4326 14.1895 19.4326C14.8164 19.4326 15.4375 19.2168 15.8438 18.8008L16.0225 18.6221L16.6836 19.2832Z" fill="white"/>
+              <path d="M17.2998 15.3633H16.3672V15.9453H17.2998V16.7344H16.3672V17.3164H17.2998V19.2832H17.8818V14.3965H16.3672V14.9785H17.2998V15.3633Z" fill="white"/>
+              <path d="M20.0977 14.9785V14.3965H18.127V19.2832H20.0977V18.7012H18.709V17.3164H20.0869V16.7344H18.709V15.5625H19.8242V14.9785H20.0977Z" fill="white"/>
+              <path d="M22.3242 14.9785V14.3965H20.3535V19.2832H22.3242V18.7012H20.9355V17.3164H22.3135V16.7344H20.9355V15.5625H22.0508V14.9785H22.3242Z" fill="white"/>
+              <path d="M24.9902 15.3633H24.0576V15.9453H24.9902V16.7344H24.0576V17.3164H24.9902V19.2832H25.5723V14.3965H24.0576V14.9785H24.9902V15.3633Z" fill="white"/>
+              <path d="M26.5 16.9497C26.5 15.1992 25.1348 13.6465 23.4648 13.6465V14.5674C24.6621 14.5674 25.5684 15.6348 25.5684 16.9497V17.0504C25.5684 18.3652 24.6621 19.4326 23.4648 19.4326V20.3535C25.1348 20.3535 26.5 18.8008 26.5 17.0504V16.9497Z" fill="white"/>
+              <defs>
+                <linearGradient id="paint0_linear_302_153" x1="28" y1="18.4978" x2="10" y2="18.4978" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#63C5DA"/>
+                  <stop offset="0.5" stop-color="#0089C7"/>
+                  <stop offset="1" stop-color="#0E2F56"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="product__payment-badge">
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="38" height="24" rx="3" fill="#F3F3F3"/>
+              <path d="M13.9883 7H24.0117C24.5552 7 25 7.44772 25 8V16C25 16.5523 24.5552 17 24.0117 17H13.9883C13.4448 17 13 16.5523 13 16V8C13 7.44772 13.4448 7 13.9883 7Z" fill="#FFCC00"/>
+              <path d="M20.5 12C20.5 13.3807 19.3807 14.5 18 14.5C16.6193 14.5 15.5 13.3807 15.5 12C15.5 10.6193 16.6193 9.5 18 9.5C19.3807 9.5 20.5 10.6193 20.5 12Z" fill="#FF6600"/>
+              <path d="M19.5 12C19.5 12.8284 18.8284 13.5 18 13.5C17.1716 13.5 16.5 12.8284 16.5 12C16.5 11.1716 17.1716 10.5 18 10.5C18.8284 10.5 19.5 11.1716 19.5 12Z" fill="#FFCC00"/>
+              <path d="M23 9.5C23 9.77614 22.7761 10 22.5 10C22.2239 10 22 9.77614 22 9.5C22 9.22386 22.2239 9 22.5 9C22.7761 9 23 9.22386 23 9.5Z" fill="#FF6600"/>
+              <path d="M14.5 14.5C14.5 14.7761 14.2761 15 14 15C13.7239 15 13.5 14.7761 13.5 14.5C13.5 14.2239 13.7239 14 14 14C14.2761 14 14.5 14.2239 14.5 14.5Z" fill="#FF6600"/>
+            </svg>
+          </div>
+          <div class="product__payment-badge">
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="38" height="24" rx="3" fill="#5F259F"/>
+              <path d="M17.8474 14.7939C17.5651 14.7939 17.4045 14.7378 17.2751 14.6182C17.1458 14.4986 17.0811 14.3285 17.0811 14.0734C17.0811 13.8135 17.1458 13.6433 17.2698 13.534C17.394 13.4196 17.5545 13.3687 17.8529 13.3687C17.9011 13.3687 17.9494 13.3687 17.9976 13.3739C18.0459 13.379 18.0995 13.3841 18.153 13.3892V13.0724H18.4834V14.7378C18.2708 14.7734 18.0529 14.7939 17.8474 14.7939ZM18.1584 14.5443V13.6126C18.1048 13.6023 18.0511 13.5972 18.0029 13.5921C17.9547 13.5869 17.9011 13.5869 17.853 13.5869C17.6671 13.5869 17.5545 13.6228 17.4786 13.6893C17.3974 13.7559 17.3599 13.8745 17.3599 14.0682C17.3599 14.2567 17.4027 14.3806 17.479 14.4471C17.5546 14.5136 17.6777 14.5494 17.8526 14.5494C17.9009 14.5494 17.9545 14.5494 18.0029 14.5444C18.0458 14.5443 18.1101 14.5443 18.1584 14.5443Z" fill="white"/>
+              <path d="M18.9095 14.7327V12.8711H19.24V14.7327H18.9095Z" fill="white"/>
+              <path d="M19.0745 12.4878C19.0048 12.4878 18.9457 12.4622 18.9025 12.4111C18.8538 12.3598 18.8323 12.2985 18.8323 12.2268C18.8323 12.1552 18.854 12.0938 18.9025 12.0425C18.9457 11.9914 19.0048 11.9658 19.0745 11.9658C19.1443 11.9658 19.2034 11.9914 19.2466 12.0425C19.295 12.0938 19.3166 12.1553 19.3166 12.2268C19.3166 12.2984 19.295 12.3598 19.2466 12.4111C19.2033 12.4622 19.1443 12.4878 19.0745 12.4878Z" fill="white"/>
+              <path d="M20.8029 14.1347H20.0472V14.7327H19.7168V12.8711H20.0472V13.9005H20.8029V12.8711H21.1333V14.7327H20.8029V14.1347Z" fill="white"/>
+              <path d="M22.4989 13.1877L22.0114 14.7327H21.681L21.194 13.1877V14.7327H20.8636V12.8711H21.3404L21.8486 14.4159L22.3569 12.8711H22.829V14.7327H22.4989V13.1877Z" fill="white"/>
+              <path d="M24.2318 13.8902C24.2318 14.1554 24.1726 14.3615 24.0486 14.5033C23.9299 14.6451 23.7441 14.7167 23.5046 14.7167C23.2651 14.7167 23.0792 14.6451 22.9608 14.5033C22.8368 14.3615 22.7773 14.1553 22.7773 13.8902V12.8711H23.1077V13.8902C23.1077 14.0526 23.1399 14.1756 23.1991 14.2473C23.2586 14.3242 23.362 14.3601 23.5047 14.3601C23.6527 14.3601 23.7508 14.3242 23.8103 14.2473C23.8695 14.1756 23.9018 14.0526 23.9018 13.8902V12.8711H24.2319V13.8902H24.2318Z" fill="white"/>
+              <path d="M25.0457 14.7327V13.2288H24.5159V12.8711H25.9057V13.2288H25.3762V14.7327H25.0457Z" fill="white"/>
+              <path d="M26.3228 14.7327V12.8711H26.6532V14.7327H26.3228Z" fill="white"/>
+              <path d="M27.5304 14.7938C27.2212 14.7938 27.0031 14.722 26.8737 14.5751C26.7443 14.4282 26.6797 14.1989 26.6797 13.9033C26.6797 13.584 26.7496 13.3445 26.8951 13.1923C27.0353 13.0403 27.2426 12.9635 27.5141 12.9635C27.5623 12.9635 27.6216 12.9687 27.6916 12.9736C27.7615 12.9788 27.8369 12.989 27.9229 13.0047V11.9658H28.2534V14.727C28.0407 14.7682 27.7992 14.7938 27.5304 14.7938ZM27.9227 14.5444V13.3483C27.8637 13.333 27.8047 13.3228 27.7509 13.3177C27.6974 13.3126 27.6545 13.3075 27.6222 13.3075C27.4258 13.3075 27.2748 13.3689 27.1723 13.4866C27.0696 13.6043 27.0158 13.7665 27.0158 13.9647C27.0158 14.1938 27.0642 14.3557 27.1667 14.4479C27.2638 14.5401 27.4203 14.587 27.6276 14.587C27.7081 14.587 27.7937 14.582 27.8799 14.5718C27.9281 14.5615 27.9333 14.5615 27.9227 14.5444Z" fill="white"/>
+              <path d="M16.2388 17.7326V16.8709H17.5775V17.2285H16.5693V17.7326H16.2388Z" fill="white"/>
+              <path d="M17.7945 16.6417C17.7246 16.6417 17.6653 16.616 17.6221 16.5649C17.5735 16.5138 17.5518 16.4525 17.5518 16.3807C17.5518 16.3093 17.5736 16.2478 17.6221 16.1965C17.6653 16.1454 17.7245 16.1197 17.7945 16.1197C17.8643 16.1197 17.9232 16.1454 17.9664 16.1965C18.015 16.2478 18.0367 16.3093 18.0367 16.3807C18.0367 16.4524 18.015 16.5138 17.9664 16.5649C17.9232 16.616 17.8643 16.6417 17.7945 16.6417ZM17.9768 17.7326H17.6463V16.8709H17.9768V17.7326Z" fill="white"/>
+              <path d="M19.3748 16.8709H19.6999V17.7326H19.3694V16.9425C19.3317 16.9425 19.2835 16.9477 19.2295 16.9528C19.1707 16.9579 19.117 16.9631 19.0635 16.9631C18.9715 16.9631 18.9068 16.9784 18.8583 17.0091C18.8097 17.0398 18.7826 17.0858 18.7826 17.1473C18.7826 17.2139 18.8043 17.2598 18.8421 17.2803C18.88 17.3007 18.9391 17.3162 19.0143 17.3162C19.1117 17.3162 19.1976 17.305 19.2672 17.2803C19.3319 17.2598 19.3854 17.2394 19.4232 17.2139V17.5714C19.3373 17.6125 19.2565 17.6381 19.1869 17.6534C19.112 17.6739 19.0251 17.6839 18.9229 17.6839C18.7398 17.6839 18.5991 17.6483 18.5021 17.5714C18.4051 17.4999 18.3564 17.3913 18.3564 17.2496C18.3564 17.0704 18.4267 16.9477 18.5724 16.8759C18.7181 16.804 18.9229 16.7683 19.1869 16.7683C19.2618 16.7683 19.3265 16.7735 19.3748 16.7785V16.8709Z" fill="white"/>
+              <path d="M20.9291 17.7326H20.3563C20.2161 17.7326 20.1083 17.697 20.0328 17.6253C19.9575 17.5537 19.9197 17.4451 19.9197 17.3011V16.8709H20.2503V17.2393C20.2503 17.3009 20.2665 17.3418 20.2987 17.3674C20.3309 17.393 20.379 17.4032 20.4437 17.4032H20.9291L20.9291 17.7326Z" fill="white"/>
+              <path d="M21.8165 17.7326V16.8709H22.147V17.7326H21.8165Z" fill="white"/>
+              <path d="M21.9818 16.6417C21.9119 16.6417 21.8528 16.616 21.8094 16.5649C21.7608 16.5138 21.7393 16.4525 21.7393 16.3807C21.7393 16.3093 21.7609 16.2478 21.8094 16.1965C21.8528 16.1454 21.9118 16.1197 21.9818 16.1197C22.0515 16.1197 22.1106 16.1454 22.1539 16.1965C22.2023 16.2478 22.2239 16.3093 22.2239 16.3807C22.2239 16.4524 22.2023 16.5138 22.1539 16.5649C22.1106 16.616 22.0515 16.6417 21.9818 16.6417Z" fill="white"/>
+              <path d="M23.0933 17.7326V16.8709H23.4238V17.7326H23.0933Z" fill="white"/>
+              <path d="M23.2585 16.6417C23.1889 16.6417 23.1298 16.616 23.0863 16.5649C23.0377 16.5138 23.0161 16.4525 23.0161 16.3807C23.0161 16.3093 23.0379 16.2478 23.0863 16.1965C23.1297 16.1454 23.1888 16.1197 23.2585 16.1197C23.3286 16.1197 23.3875 16.1454 23.4307 16.1965C23.4794 16.2478 23.5009 16.3093 23.5009 16.3807C23.5009 16.4524 23.4792 16.5138 23.4307 16.5649C23.3875 16.616 23.3285 16.6417 23.2585 16.6417Z" fill="white"/>
+            </svg>
           </div>
         </div>
-      {% endif %}
+        
+        <!-- Policy Links -->
+        <div class="product__policy-links">
+          <a href="/policies/refund-policy" class="product__policy-link">
+            <span class="product__policy-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 14L4 9L9 4" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20 20V13C20 11.9391 19.5786 10.9217 18.8284 10.1716C18.0783 9.42143 17.0609 9 16 9H4" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Return Policy
+          </a>
+          <a href="/policies/shipping-policy" class="product__policy-link">
+            <span class="product__policy-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 3H1V16H16V3Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 8H20L23 11V16H16V8Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5.5 21C6.88071 21 8 19.8807 8 18.5C8 17.1193 6.88071 16 5.5 16C4.11929 16 3 17.1193 3 18.5C3 19.8807 4.11929 21 5.5 21Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M18.5 21C19.8807 21 21 19.8807 21 18.5C21 17.1193 19.8807 16 18.5 16C17.1193 16 16 17.1193 16 18.5C16 19.8807 17.1193 21 18.5 21Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Shipping Policy
+          </a>
+          <a href="/policies/privacy-policy" class="product__policy-link">
+            <span class="product__policy-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 16V12" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 8H12.01" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Privacy Policy
+          </a>
+        </div>
+      </div>
     </div>
   </div>
   
@@ -282,7 +435,7 @@
       <!-- Main description -->
       <div class="product__accordion is-active">
         <button class="product__accordion-header">
-          <span>{{ section.settings.description_title }}</span>
+          <span>{{ section.settings.description_title | default: 'Description' }}</span>
           <span class="product__accordion-icon">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -300,7 +453,7 @@
       {% if section.settings.show_features_tab and section.settings.features_content != blank %}
         <div class="product__accordion">
           <button class="product__accordion-header">
-            <span>{{ section.settings.features_title }}</span>
+            <span>{{ section.settings.features_title | default: 'Features' }}</span>
             <span class="product__accordion-icon">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -319,7 +472,7 @@
       {% if section.settings.show_shipping_tab and section.settings.shipping_content != blank %}
         <div class="product__accordion">
           <button class="product__accordion-header">
-            <span>{{ section.settings.shipping_tab_title }}</span>
+            <span>{{ section.settings.shipping_tab_title | default: 'Shipping & Returns' }}</span>
             <span class="product__accordion-icon">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -333,6 +486,13 @@
           </div>
         </div>
       {% endif %}
+    </div>
+  </div>
+  
+  <!-- JudgeMe Reviews Widget -->
+  <div class="product__reviews-section">
+    <div id="judgeme_product_reviews" class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}">
+      {{ product.metafields.judgeme.widget }}
     </div>
   </div>
 </div>
@@ -349,7 +509,7 @@
     {% endif %}
   </div>
   <button class="product__mobile-buy-button" id="MobileBuyButton">
-    {{ 'product-template.add_to_cart' | t }}
+    {{ section.settings.add_to_cart_text | default: 'Add to cart' }}
   </button>
 </div>
 {% endif %}
@@ -591,7 +751,7 @@
           if (countdownElement) {
             countdownElement.textContent = "00:00:00";
           } else {
-            timerElement.innerHTML = "<p>{{ section.settings.offer_ended_text }}</p>";
+            timerElement.innerHTML = "<p>{{ section.settings.offer_ended_text | default: 'Offer ended!' }}</p>";
           }
         }
       }, 1000);
@@ -743,7 +903,7 @@
         if (variant.available) {
           addToCartButton.classList.remove('disabled');
           addToCartButton.disabled = false;
-          addToCartText.innerHTML = '{{ section.settings.add_to_cart_text }}';
+          addToCartText.innerHTML = '{{ section.settings.add_to_cart_text | default: 'Add to cart' }}';
           
           if (mobileBuyButton) {
             mobileBuyButton.disabled = false;
@@ -752,12 +912,12 @@
         } else {
           addToCartButton.classList.add('disabled');
           addToCartButton.disabled = true;
-          addToCartText.innerHTML = '{{ section.settings.sold_out_text }}';
+          addToCartText.innerHTML = '{{ section.settings.sold_out_text | default: 'Sold out' }}';
           
           if (mobileBuyButton) {
             mobileBuyButton.disabled = true;
             mobileBuyButton.classList.add('disabled');
-            mobileBuyButton.textContent = '{{ section.settings.sold_out_text }}';
+            mobileBuyButton.textContent = '{{ section.settings.sold_out_text | default: 'Sold out' }}';
           }
         }
       }
@@ -824,7 +984,7 @@
 
 {% schema %}
 {
-  "name": "Dropshipping Product",
+  "name": "Product",
   "settings": [
     {
       "type": "header",
@@ -928,58 +1088,6 @@
     },
     {
       "type": "header",
-      "content": "Product benefits"
-    },
-    {
-      "type": "text",
-      "id": "shipping_title",
-      "label": "Shipping benefit title",
-      "default": "Fast Shipping"
-    },
-    {
-      "type": "text",
-      "id": "shipping_text",
-      "label": "Shipping text",
-      "default": "Tracked delivery in 10-15 days"
-    },
-    {
-      "type": "text",
-      "id": "guarantee_title",
-      "label": "Guarantee benefit title",
-      "default": "Money-Back Guarantee"
-    },
-    {
-      "type": "text",
-      "id": "guarantee_text",
-      "label": "Guarantee text",
-      "default": "Refund within 30 days"
-    },
-    {
-      "type": "text",
-      "id": "payment_title",
-      "label": "Payment benefit title",
-      "default": "Secure Payment"
-    },
-    {
-      "type": "text",
-      "id": "payment_text",
-      "label": "Payment text",
-      "default": "100% secure transactions"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_trust_badges",
-      "label": "Show trust badges",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "trust_badges_title",
-      "label": "Trust badges title",
-      "default": "Trusted Payment Methods"
-    },
-    {
-      "type": "header",
       "content": "Product description"
     },
     {
@@ -1039,23 +1147,11 @@
       "id": "show_image_navigation",
       "label": "Show image navigation controls",
       "default": true
-    },
-    {
-      "type": "text",
-      "id": "previous_image_text",
-      "label": "Previous image text",
-      "default": "Previous"
-    },
-    {
-      "type": "text",
-      "id": "next_image_text",
-      "label": "Next image text",
-      "default": "Next"
     }
   ],
   "presets": [
     {
-      "name": "Dropshipping Product",
+      "name": "Product",
       "category": "Product"
     }
   ]
