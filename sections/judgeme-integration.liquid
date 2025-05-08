@@ -1,394 +1,133 @@
 {% comment %}
-  judgeme-integration.liquid - Section pour l'intégration de JudgeMe avec le thème PIXELLECT
+  judgeme-integration.liquid - Section pour l'intégration simple de JudgeMe avec CSS personnalisé
 {% endcomment %}
 
 {{ 'judgeme-pixellect.css' | asset_url | stylesheet_tag }}
 
-<div class="judgeme-reviews" id="judgeme-reviews-section">
-  <div class="judgeme-reviews__container">
-    <div class="judgeme-reviews__header">
-      <h2 class="judgeme-reviews__title">{{ section.settings.reviews_title }}</h2>
-      {% if section.settings.show_subtitle %}
-        <p class="judgeme-reviews__subtitle">{{ section.settings.reviews_subtitle }}</p>
-      {% endif %}
-    </div>
-    
-    <div class="judgeme-reviews__content">
-      {% if section.settings.show_summary %}
-        <div class="judgeme-reviews__summary-wrapper">
-          <div class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}"></div>
-        </div>
-      {% endif %}
-      
-      <!-- Widget principal JudgeMe -->
-      <div class="jdgm-widget jdgm-reviews-widget" data-product-id="{{ product.id }}">
-        {% if section.settings.show_widget_header %}
-          <div class="judgeme-reviews__widget-header">
-            <div data-score-container class="judgeme-reviews__score-container"></div>
-            <div data-filter-container class="judgeme-reviews__filter-container"></div>
-            <div data-sort-container class="judgeme-reviews__sort-container"></div>
-          </div>
+<div class="judgeme-simple">
+  <div class="judgeme-simple__container">
+    {% if section.settings.show_title %}
+      <div class="judgeme-simple__header">
+        <h2 class="judgeme-simple__title">{{ section.settings.title_text }}</h2>
+        {% if section.settings.show_subtitle %}
+          <p class="judgeme-simple__subtitle">{{ section.settings.subtitle_text }}</p>
         {% endif %}
       </div>
+    {% endif %}
+    
+    {% if section.settings.show_shipping_info %}
+      <div class="judgeme-simple__shipping-info">
+        <div class="judgeme-simple__shipping-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 6V12L16 14" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="judgeme-simple__shipping-text">
+          <strong>{{ section.settings.shipping_title }}</strong> {{ section.settings.shipping_text }}
+        </div>
+      </div>
+    {% endif %}
+    
+    <!-- Code JudgeMe standard -->
+    <div id="judgeme_product_reviews" class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}">
+      {{ product.metafields.judgeme.widget }}
     </div>
     
-    {% if section.settings.show_featured %}
-      <div class="judgeme-reviews__featured">
-        <h3 class="judgeme-reviews__featured-title">{{ section.settings.featured_title }}</h3>
-        <div class="jdgm-carousel-wrapper" data-auto-rotate-speed="{{ section.settings.carousel_speed | times: 1000 }}" data-number-of-reviews="{{ section.settings.featured_count }}"></div>
-      </div>
-    {% endif %}
-    
-    {% if section.settings.show_cta %}
-      <div class="judgeme-reviews__cta">
-        <p class="judgeme-reviews__cta-text">{{ section.settings.cta_text }}</p>
-        <a href="#judgeme-reviews-section" class="judgeme-reviews__cta-button jdgm-write-review-trigger">
-          {{ section.settings.cta_button_text }}
-          <span class="judgeme-reviews__cta-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    {% if section.settings.show_guarantee %}
+      <div class="judgeme-simple__guarantee">
+        <div class="judgeme-simple__guarantee-content">
+          <div class="judgeme-simple__guarantee-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </span>
-        </a>
-      </div>
-    {% endif %}
-    
-    {% if section.settings.show_trust %}
-      <div class="judgeme-reviews__trust">
-        <div class="judgeme-reviews__trust-items">
-          {% for block in section.blocks %}
-            {% if block.type == 'trust_item' %}
-              <div class="judgeme-reviews__trust-item" {{ block.shopify_attributes }}>
-                <div class="judgeme-reviews__trust-icon">
-                  {% case block.settings.icon %}
-                    {% when 'verify' %}
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    {% when 'star' %}
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    {% when 'shield' %}
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    {% when 'camera' %}
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2v11z" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="12" cy="13" r="4" stroke="#f0c362" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    {% when 'custom' %}
-                      {{ block.settings.custom_icon }}
-                  {% endcase %}
-                </div>
-                <h4 class="judgeme-reviews__trust-title">{{ block.settings.title }}</h4>
-                <p class="judgeme-reviews__trust-text">{{ block.settings.text }}</p>
-              </div>
-            {% endif %}
-          {% endfor %}
+          </div>
+          <div class="judgeme-simple__guarantee-text">
+            <strong>{{ section.settings.guarantee_title }}</strong> {{ section.settings.guarantee_text }}
+          </div>
         </div>
       </div>
     {% endif %}
   </div>
 </div>
 
-{% comment %}
-  Le code suivant est nécessaire pour personnaliser JudgeMe avec notre CSS
-{% endcomment %}
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Attendre que JudgeMe soit chargé
-    function waitForJudgeme() {
-      if (window.jdgm && window.jdgm.WIDGET_APP) {
-        customizeJudgeme();
-      } else {
-        setTimeout(waitForJudgeme, 100);
-      }
-    }
-    
-    // Personnaliser les éléments de JudgeMe après leur chargement
-    function customizeJudgeme() {
-      // Observer les changements dans le DOM pour appliquer nos styles aux éléments JudgeMe
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.addedNodes.length) {
-            styleJudgemeElements();
-          }
-        });
-      });
-      
-      // Observer le conteneur principal
-      const targetNode = document.querySelector('.judgeme-reviews');
-      if (targetNode) {
-        observer.observe(targetNode, { childList: true, subtree: true });
-      }
-      
-      // Appliquer les styles initiaux
-      styleJudgemeElements();
-      
-      // Ajouter la classe pixellect-theme au corps du document pour les sélecteurs CSS
-      document.body.classList.add('pixellect-judgeme-theme');
-    }
-    
-    // Styles personnalisés pour les éléments JudgeMe
-    function styleJudgemeElements() {
-      // Customiser les avatars
-      const avatars = document.querySelectorAll('.jdgm-rev__pic');
-      avatars.forEach(function(avatar) {
-        if (!avatar.classList.contains('pixellect-styled')) {
-          // Si l'avatar n'a pas d'image, ajouter des initiales pixelisées
-          if (!avatar.querySelector('img')) {
-            // Obtenir le nom du reviewer
-            const nameElem = avatar.closest('.jdgm-rev').querySelector('.jdgm-rev__author');
-            if (nameElem) {
-              const name = nameElem.textContent.trim();
-              const initials = getInitials(name);
-              
-              // Créer l'avatar pixelisé avec les initiales
-              const initialsElem = document.createElement('div');
-              initialsElem.className = 'judgeme-reviews__pixel-avatar';
-              initialsElem.textContent = initials;
-              avatar.appendChild(initialsElem);
-              
-              // Ajouter une classe pour éviter de styler à nouveau
-              avatar.classList.add('pixellect-styled');
-            }
-          }
-        }
-      });
-      
-      // Ajouter l'icône de vérification
-      const verifiedBadges = document.querySelectorAll('.jdgm-rev__verified');
-      verifiedBadges.forEach(function(badge) {
-        if (!badge.classList.contains('pixellect-styled')) {
-          const iconSvg = `
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="judgeme-reviews__verified-icon">
-              <path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          `;
-          badge.innerHTML = iconSvg + badge.innerHTML;
-          badge.classList.add('pixellect-styled');
-        }
-      });
-      
-      // Styliser les boutons de pagination
-      const paginationButtons = document.querySelectorAll('.jdgm-paginate__page');
-      paginationButtons.forEach(function(button) {
-        if (!button.classList.contains('pixellect-styled')) {
-          button.classList.add('judgeme-reviews__page-button');
-          button.classList.add('pixellect-styled');
-        }
-      });
-    }
-    
-    // Aide à obtenir les initiales d'un nom
-    function getInitials(name) {
-      const nameParts = name.split(' ');
-      if (nameParts.length > 1) {
-        return (nameParts[0].charAt(0) + nameParts[1].charAt(0)).toUpperCase();
-      } else {
-        return nameParts[0].charAt(0).toUpperCase();
-      }
-    }
-    
-    // Démarrer le processus
-    waitForJudgeme();
-  });
-</script>
-
 {% schema %}
 {
-  "name": "Avis JudgeMe",
+  "name": "Avis JudgeMe Simple",
   "settings": [
     {
       "type": "header",
-      "content": "Paramètres généraux"
+      "content": "En-tête"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Afficher le titre",
+      "default": true
     },
     {
       "type": "text",
-      "id": "reviews_title",
-      "label": "Titre de la section",
-      "default": "Avis clients"
+      "id": "title_text",
+      "label": "Texte du titre",
+      "default": "Avis Clients"
     },
     {
       "type": "checkbox",
       "id": "show_subtitle",
-      "label": "Afficher un sous-titre",
+      "label": "Afficher le sous-titre",
       "default": false
     },
     {
       "type": "text",
-      "id": "reviews_subtitle",
-      "label": "Sous-titre",
-      "default": "Découvrez ce que nos clients pensent de nos produits",
-      "info": "Visible uniquement si l'option 'Afficher un sous-titre' est activée"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_summary",
-      "label": "Afficher le résumé des avis",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_widget_header",
-      "label": "Afficher l'en-tête du widget",
-      "default": true,
-      "info": "Inclut la note moyenne, les filtres et les options de tri"
+      "id": "subtitle_text",
+      "label": "Texte du sous-titre",
+      "default": "Découvrez ce que nos clients pensent de nos produits"
     },
     {
       "type": "header",
-      "content": "Avis en vedette"
+      "content": "Informations supplémentaires"
     },
     {
       "type": "checkbox",
-      "id": "show_featured",
-      "label": "Afficher les avis en vedette",
+      "id": "show_shipping_info",
+      "label": "Afficher les informations de livraison",
       "default": true
     },
     {
       "type": "text",
-      "id": "featured_title",
-      "label": "Titre des avis en vedette",
-      "default": "Ce que disent nos clients"
+      "id": "shipping_title",
+      "label": "Titre de livraison",
+      "default": "Délai de livraison:"
     },
     {
-      "type": "range",
-      "id": "featured_count",
-      "min": 3,
-      "max": 10,
-      "step": 1,
-      "label": "Nombre d'avis à afficher",
-      "default": 5
-    },
-    {
-      "type": "range",
-      "id": "carousel_speed",
-      "min": 0,
-      "max": 10,
-      "step": 1,
-      "label": "Vitesse de rotation du carrousel (secondes)",
-      "default": 5,
-      "info": "Mettre à 0 pour désactiver la rotation automatique"
-    },
-    {
-      "type": "header",
-      "content": "Appel à l'action"
+      "type": "text",
+      "id": "shipping_text",
+      "label": "Texte de livraison",
+      "default": "10-20 jours ouvrables pour la livraison internationale. Nous expédions depuis nos entrepôts internationaux pour vous garantir les meilleurs prix."
     },
     {
       "type": "checkbox",
-      "id": "show_cta",
-      "label": "Afficher un appel à l'action",
+      "id": "show_guarantee",
+      "label": "Afficher la garantie",
       "default": true
     },
     {
       "type": "text",
-      "id": "cta_text",
-      "label": "Texte de l'appel à l'action",
-      "default": "Vous avez acheté ce produit? Partagez votre expérience!"
+      "id": "guarantee_title",
+      "label": "Titre de la garantie",
+      "default": "Garantie satisfaction:"
     },
     {
       "type": "text",
-      "id": "cta_button_text",
-      "label": "Texte du bouton",
-      "default": "Écrire un avis"
-    },
-    {
-      "type": "header",
-      "content": "Section confiance"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_trust",
-      "label": "Afficher la section de confiance",
-      "default": true
-    }
-  ],
-  "blocks": [
-    {
-      "type": "trust_item",
-      "name": "Élément de confiance",
-      "settings": [
-        {
-          "type": "select",
-          "id": "icon",
-          "label": "Icône",
-          "options": [
-            {
-              "value": "verify",
-              "label": "Vérification"
-            },
-            {
-              "value": "star",
-              "label": "Étoile"
-            },
-            {
-              "value": "shield",
-              "label": "Bouclier"
-            },
-            {
-              "value": "camera",
-              "label": "Caméra"
-            },
-            {
-              "value": "custom",
-              "label": "Personnalisée"
-            }
-          ],
-          "default": "verify"
-        },
-        {
-          "type": "html",
-          "id": "custom_icon",
-          "label": "Icône personnalisée (SVG)",
-          "info": "Visible uniquement si 'Personnalisée' est sélectionnée"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Titre",
-          "default": "Avis vérifiés"
-        },
-        {
-          "type": "textarea",
-          "id": "text",
-          "label": "Texte",
-          "default": "Tous nos avis sont rédigés par des clients ayant acheté nos produits."
-        }
-      ]
+      "id": "guarantee_text",
+      "label": "Texte de la garantie",
+      "default": "Nous offrons un remboursement complet si vous n'êtes pas satisfait de votre achat. Votre satisfaction est notre priorité absolue!"
     }
   ],
   "presets": [
     {
-      "name": "Avis JudgeMe",
-      "category": "Produit",
-      "blocks": [
-        {
-          "type": "trust_item",
-          "settings": {
-            "icon": "verify",
-            "title": "Avis vérifiés",
-            "text": "Tous nos avis sont rédigés par des clients ayant acheté nos produits."
-          }
-        },
-        {
-          "type": "trust_item",
-          "settings": {
-            "icon": "star",
-            "title": "Évaluations transparentes",
-            "text": "Nous publions tous les avis, positifs comme négatifs, pour vous aider à choisir."
-          }
-        },
-        {
-          "type": "trust_item",
-          "settings": {
-            "icon": "camera",
-            "title": "Photos des clients",
-            "text": "Voyez nos produits en situation réelle grâce aux photos prises par nos clients."
-          }
-        }
-      ]
+      "name": "Avis JudgeMe Simple",
+      "category": "Produit"
     }
   ]
 }
