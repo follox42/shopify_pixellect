@@ -19,7 +19,7 @@
   font-weight: 700;
   margin-bottom: 16px;
   background-image: 
-    url('{{ "texture.png" | asset_url }}'),
+    url('//pixellect.shosai.fr/cdn/shop/t/3/assets/texture.png?v=118549940688615224071746476749'),
     linear-gradient(to bottom, rgba(236, 169, 91, 0.3), rgba(112, 64, 24, 0.8));
   background-blend-mode: overlay;
   
@@ -110,7 +110,7 @@
 }
 
 .product-card {
-  background-image: url('{{ "grain-dark.png" | asset_url }}');
+  background-image: url('//pixellect.shosai.fr/cdn/shop/t/3/assets/grain-dark.png?v=100408710807914299201746476749');
   background-position: center;
   background-size: 100% 100%;
   background-repeat: no-repeat;

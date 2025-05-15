@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+.contact {
+  padding: 80px 0;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  font-family: "Montserrat", sans-serif;
+}
+
+.contact__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  gap: 40px;
+}
+
+.contact__content {
+  flex: 1;
+  max-width: 550px;
+}
+
+.contact__title {
+  color: #f0c362;
+  font-size: 3em;
+  line-height: 1.1;
+  font-weight: 900;
+  margin-bottom: 20px;
+  text-transform: none;
+}
+
+.contact__description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact__form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact__label {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.contact__input,
+.contact__textarea {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 14px 16px;
+  color: #fff;
+  font-size: 16px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  outline: none;
+  font-family: "Montserrat", sans-serif;
+}
+
+.contact__input:focus,
+.contact__textarea:focus {
+  border-color: rgba(240, 195, 98, 0.5);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.contact__textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact__form-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.contact__submit-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(240, 195, 98, 0.2);
+  color: #f0c362;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  gap: 10px;
+}
+
+.contact__submit-button:hover {
+  background-color: rgba(240, 195, 98, 0.3);
+  transform: translateY(-2px);
+}
+
+.contact__button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact__button-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
+.contact__image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 450px;
+}
+
+.contact__image-wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.contact__image {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+  -webkit-mask-image: 
+    linear-gradient(to top, transparent 5%, black 30%, black 90%, transparent 100%),
+    linear-gradient(to left, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-composite: intersect;
+
+  mask-image: 
+    linear-gradient(to top, transparent 0%, black 30%),
+    linear-gradient(to right, black 70%, transparent 95%);
+  mask-composite: intersect;
+}
+
+.contact__image-glow {
+  position: absolute;
+  left: -14%;
+  top: -25%;
+  width: 90%;
+  height: 90%;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, rgba(240, 209, 147, 0.86) 0%, rgba(240, 209, 147, 0.86) 15%, rgba(240, 209, 147, 0.63) 20%, rgba(240, 209, 147, 0.63) 35%, rgba(240, 209, 147, 0.42) 40%, rgba(240, 209, 147, 0.42) 75%, rgba(240, 209, 147, 0.14) 80%, transparent 100%);
+  filter: blur(20px);
+}
+
+/* Media Queries */
+@media screen and (max-width: 991px) {
+  .contact__container {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+  
+  .contact__content {
+    max-width: 100%;
+  }
+  
+  .contact__image-container {
+    max-width: 300px;
+    margin-bottom: 40px;
+  }
+  
+  .contact__form-actions {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .contact {
+    padding: 60px 0;
+  }
+  
+  .contact__title {
+    font-size: 2.5em;
+  }
+  
+  .contact__description {
+    font-size: 15px;
+  }
+  
+  .contact__input,
+  .contact__textarea,
+  .contact__submit-button {
+    font-size: 15px;
+    padding: 12px 16px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .contact__input,
+  .contact__textarea,
+  .contact__submit-button {
+    transition: none;
+  }
+}

@@ -45,6 +45,8 @@
             alt="{{ product.featured_media.alt | escape }}"
             id="ProductMainImage"
             class="product__main-image"
+            loading="lazy"
+            decoding="async"
             data-zoom-image="{{ product.featured_media | img_url: '1200x' }}"
             {% if product.media.size > 1 %}data-index="0"{% endif %}
           >
